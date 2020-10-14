@@ -1,62 +1,128 @@
 #include "raylib.h"
 #include "stdio.h"
+#include <time.h>
 
+#include "./includes/player.h"
+#include "./includes/item.h"
+#include "./includes/inventory.h"
+#include "./includes/game.h"
+
+#define G 400
+#define PLAYER_JUMP_SPD 350.0f
+
+const int screenWidth = 800;
+const int screenHeight = 600;
+Player player = {(Vector2){200, 200}, (Vector2){100.f, 100.f}, 1.f, 1.f, (Vector3){1, 1, 1}, (Color){125, 125, 125, 255}};
+Camera2D camera = { 0 };
+char coords[10];
+
+//------------------------------------------------------------------------------------
+// Module Functions Declaration (local)
+//------------------------------------------------------------------------------------
+static void InitGame(void);                                 // Initialize game
+static void UpdateGame(void);                               // Update game (one frame)
+static void UpdatePlayer(float delta);                      // Update player (one frame)
+static void DrawGame(void);                                 // Draw game (one frame)
+static void UnloadGame(void);                               // Unload game
+static void UpdateDrawFrame(void);                          // Update and Draw (one frame)
+void UpdateCameraCenter(Camera2D *camera, Player *player, int width, int height);
+
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
-    int screenWidth = 800;
-    int screenHeight = 600;
-
+    // Initialization (Note windowTitle is unused on Android)
+    //---------------------------------------------------------
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenWidth, screenHeight, "50NuancesDeCodes - by IMT GREY TEAM");
 
-    Camera camera = { 0 };
-    camera.position = (Vector3){ -5.0f, 1.0f, -5.0f };
-    camera.target = (Vector3){ 0.0f, 1.0f, 0.0f };
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
-    camera.fovy = 60.0f;
-    camera.type = CAMERA_PERSPECTIVE;
+    InitGame();
 
-    SetCameraMode(camera, CAMERA_FIRST_PERSON);
-
-    char coords[50];
+#if defined(PLATFORM_WEB)
+    emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
+#else
     SetTargetFPS(60);
-
-    while (!WindowShouldClose())
+    //--------------------------------------------------------------------------------------
+    
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        UpdateCamera(&camera);
-        sprintf(coords, "X: %.2f\nY: %.2f\nZ: %.2f", camera.position.x, camera.position.y, camera.position.z);
-
-        if (IsWindowResized())
-        {
-            screenWidth = GetScreenWidth();
-            screenHeight = GetScreenHeight();
-        }
-
-        BeginDrawing();
-            ClearBackground(RAYWHITE);
-
-            BeginMode3D(camera);
-                for (int x = 0; x < 16; x++) {
-                    for (int y = 0; y < 16; y++) {
-                        for (int z = 0; z < 16; z++) {
-                            DrawCube((Vector3){x*5, y, z*5}, 1, 1, 1, LIGHTGRAY);
-                            DrawCubeWires((Vector3){x*5, y, z*5}, 1, 1, 1, BLACK);
-                        }
-                    }
-                }
-            EndMode3D();
-
-            sprintf(coords, "X: %.2f\nY: %.2f\nZ: %.2f", camera.position.x, camera.position.y, camera.position.z);
-            DrawLine(screenWidth/2 - 10, screenHeight/2 - 1, screenWidth/2 + 10, screenHeight/2 + 1, BLACK);
-            DrawLine(screenWidth/2 - 1, screenHeight/2 - 10, screenWidth/2 + 1, screenHeight/2 + 10, BLACK);
-            DrawText(coords, 10, screenHeight-(24*3)-14, 20, BLACK);
-            DrawFPS(10, 10);
-
-        EndDrawing();
+        // Update and Draw
+        //----------------------------------------------------------------------------------
+        UpdateDrawFrame();
+        //----------------------------------------------------------------------------------
     }
-
-    CloseWindow();
+#endif
+    // De-Initialization
+    //--------------------------------------------------------------------------------------
+    UnloadGame();         // Unload loaded data (textures, sounds, models...)
+    
+    CloseWindow();        // Close window and OpenGL context
+    //--------------------------------------------------------------------------------------
 
     return 0;
+}
+
+// Initialize game variables
+void InitGame() {
+    camera.target = player.position;
+    camera.offset = (Vector2){ screenWidth/2, screenHeight/2 };
+    camera.rotation = 0.0f;
+    camera.zoom = 1.0f;
+
+}
+
+// Update game (one frame)
+void UpdateGame(void) {
+    float deltaTime = GetFrameTime();
+    UpdatePlayer(deltaTime);
+    UpdateCameraCenter(&camera, &player, screenWidth, screenHeight);
+    sprintf(coords, "X: %.2f\nY: %.2f", player.position.x, player.position.y);
+}
+
+// Update player (one frame)
+void UpdatePlayer(float delta) {
+    // LEFT AND RIGHT
+    if (IsKeyDown(KEY_LEFT)) player.position.x -= player.speed.x*delta;
+    if (IsKeyDown(KEY_RIGHT)) player.position.x += player.speed.x*delta;
+    // UP AND DOWN
+    if (IsKeyDown(KEY_UP)) player.position.y -= player.speed.y*delta;
+    if (IsKeyDown(KEY_DOWN)) player.position.y += player.speed.y*delta;
+}
+
+// Draw game (one frame)
+void DrawGame(void) {
+    BeginDrawing();
+
+        ClearBackground(RAYWHITE);
+
+        DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+        DrawRectangle(player.position.x, player.position.y, 48, 96, GREEN);
+        DrawRectangleLines(player.position.x, player.position.y, 48, 96, RED);
+
+        DrawFPS(10, 10);
+        DrawText(coords, 10, 32, 16, WHITE);
+
+    EndDrawing();
+}
+
+// Unload game
+void UnloadGame(void) {
+
+}
+
+// Update and Draw (one frame)
+void UpdateDrawFrame(void)
+{
+    UpdateGame();
+    DrawGame();
+}
+
+// Camera center
+void UpdateCameraCenter(Camera2D *camera, Player *player, int width, int height)
+{
+    camera->offset = (Vector2){ width/2, height/2 };
+    camera->target = player->position;
 }
