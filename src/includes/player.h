@@ -12,6 +12,7 @@ typedef struct Player {
     Vector3 collider;
     Color color;
     Inventory inventory;
+    int sprinting;
 } Player;
 
 Player* Player_new(Vector2 position, Vector2 speed, float acceleration, float rotation, Vector3 collider, Color color) {
@@ -24,6 +25,7 @@ Player* Player_new(Vector2 position, Vector2 speed, float acceleration, float ro
     p->color = color;
     Inventory inv;
     p->inventory = inv;
+    p->sprinting = -1;
     return p;
 }
 
