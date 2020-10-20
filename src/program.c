@@ -60,7 +60,7 @@ int main(void)
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     SetTraceLogCallback(logger);
-    InitWindow(screenWidth, screenHeight, "50NuancesDeCodes - by IMT GREY TEAM");
+    InitWindow(screenWidth, screenHeight, "50NuancesDeCodes - by IMT GRAY TEAM");
 
     InitGame();
 
