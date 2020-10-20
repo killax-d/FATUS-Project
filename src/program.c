@@ -14,7 +14,7 @@ const int screenWidth = 800;
 const int screenHeight = 600;
 Player player = {(Vector2){200, 200}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector3){1.f, 1.f, 1.f}, (Color){125, 125, 125, 255}};
 Camera2D camera = { 0 };
-char coords[10];
+char coords[20];
 
 // Custom logger
 static void logger(int msgType, const char *text, va_list args)
