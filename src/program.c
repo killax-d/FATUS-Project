@@ -12,9 +12,14 @@
 
 const int screenWidth = 800;
 const int screenHeight = 600;
-Player player = {(Vector2){200, 200}, (Vector2){100.f, 100.f}, 1.f, 1.f, (Vector3){1, 1, 1}, (Color){125, 125, 125, 255}};
+Player player = {(Vector2){200, 200}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{}, 0, ""}, -1};
 Camera2D camera = { 0 };
-char coords[10];
+char coords[20];
+
+// INIT MAP GRID
+#define MAP_X_LENGTH 12
+#define MAP_Y_LENGTH 9
+Color map[MAP_Y_LENGTH][MAP_X_LENGTH];
 
 // Custom logger
 static void logger(int msgType, const char *text, va_list args)
@@ -96,6 +101,12 @@ void InitGame() {
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
 
+    // GENERATE MAP
+	for (int y = 0; y < MAP_Y_LENGTH; y++) {
+		for (int x = 0; x < MAP_X_LENGTH; x++) {
+			map[y][x] = (Color){125, 125, 125, 255};
+		}
+	}
 }
 
 // Update game (one frame)
@@ -108,12 +119,16 @@ void UpdateGame(void) {
 
 // Update player (one frame)
 void UpdatePlayer(float delta) {
+	if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) player.sprinting = 0;
+	else player.sprinting = -1;
+
+	// Note: Keyboard mapping is only QWERTY
     // LEFT AND RIGHT
-    if (IsKeyDown(KEY_LEFT)) player.position.x -= player.speed.x*delta;
-    if (IsKeyDown(KEY_RIGHT)) player.position.x += player.speed.x*delta;
+    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) player.position.x -= player.speed.x * ((player.sprinting) ? 1.f : player.acceleration) * delta;
+    if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) player.position.x += player.speed.x * ((player.sprinting) ? 1.f : player.acceleration) * delta;
     // UP AND DOWN
-    if (IsKeyDown(KEY_UP)) player.position.y -= player.speed.y*delta;
-    if (IsKeyDown(KEY_DOWN)) player.position.y += player.speed.y*delta;
+    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) player.position.y -= player.speed.y * ((player.sprinting) ? 1.f : player.acceleration) * delta;
+    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) player.position.y += player.speed.y * ((player.sprinting) ? 1.f : player.acceleration) * delta;
 }
 
 // Draw game (one frame)
@@ -123,6 +138,15 @@ void DrawGame(void) {
         ClearBackground(RAYWHITE);
 
         DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+
+        // DRAW MAP GRID
+		for (int y = 0; y < MAP_Y_LENGTH; y++) {
+			for (int x = 0; x < MAP_X_LENGTH; x++) {
+		        DrawRectangle(x * 64, y * 64, 64, 64, map[y][x]);
+		        DrawRectangleLines(x * 64, y * 64, 64, 64, BLUE);
+			}
+		}
+
         DrawRectangle(player.position.x, player.position.y, 48, 96, GREEN);
         DrawRectangleLines(player.position.x, player.position.y, 48, 96, RED);
 

@@ -7,7 +7,7 @@
 typedef struct Inventory {
     Item items[10];
     int nbItems;
-    char notes;
+    char * notes;
 } Inventory;
 
 Inventory* Inventory_new() {
