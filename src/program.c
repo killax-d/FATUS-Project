@@ -12,7 +12,7 @@
 
 const int screenWidth = 800;
 const int screenHeight = 600;
-Player player = {(Vector2){200, 200}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector3){1.f, 1.f, 1.f}, (Color){125, 125, 125, 255}};
+Player player = {(Vector2){200, 200}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{}, 0, ""}, -1};
 Camera2D camera = { 0 };
 char coords[20];
 
