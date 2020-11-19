@@ -16,6 +16,11 @@ Player player = {(Vector2){200, 200}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vect
 Camera2D camera = { 0 };
 char coords[20];
 
+// INIT MAP GRID
+#define MAP_X_LENGTH 12
+#define MAP_Y_LENGTH 9
+Color map[MAP_Y_LENGTH][MAP_X_LENGTH];
+
 // Custom logger
 static void logger(int msgType, const char *text, va_list args)
 {
@@ -96,6 +101,12 @@ void InitGame() {
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
 
+    // GENERATE MAP
+	for (int y = 0; y < MAP_Y_LENGTH; y++) {
+		for (int x = 0; x < MAP_X_LENGTH; x++) {
+			map[y][x] = (Color){125, 125, 125, 255};
+		}
+	}
 }
 
 // Update game (one frame)
@@ -127,6 +138,15 @@ void DrawGame(void) {
         ClearBackground(RAYWHITE);
 
         DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+
+        // DRAW MAP GRID
+		for (int y = 0; y < MAP_Y_LENGTH; y++) {
+			for (int x = 0; x < MAP_X_LENGTH; x++) {
+		        DrawRectangle(x * 64, y * 64, 64, 64, map[y][x]);
+		        DrawRectangleLines(x * 64, y * 64, 64, 64, BLUE);
+			}
+		}
+
         DrawRectangle(player.position.x, player.position.y, 48, 96, GREEN);
         DrawRectangleLines(player.position.x, player.position.y, 48, 96, RED);
 
