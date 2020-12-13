@@ -235,7 +235,7 @@ void DrawGame(void) {
             DrawRectangle(player.position.x - 20, player.position.y - 20, 40, 40, RED);
         EndMode2D();
 
-        DrawFPS(screenWidth-80, 10);
+        DrawFPS(GetScreenWidth()-80, 10);
         DrawText("Touches :", 20, 20, 10, WHITE);
         DrawText("- ZQSD ou Flèches pour se diriger", 40, 40, 10, WHITE);
         DrawText("- Shift pour sprinter", 40, 60, 10, WHITE);
@@ -259,5 +259,5 @@ void UpdateDrawFrame(void)
 void UpdateCameraCenter()
 {
     camera.target = player.position;
-    camera.offset = (Vector2){ screenWidth/2, screenHeight/2 };
+    camera.offset = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
 }
