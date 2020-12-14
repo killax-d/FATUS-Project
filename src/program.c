@@ -162,6 +162,16 @@ void UpdateGame(void) {
 
 // Update player (one frame)
 void UpdatePlayer(float delta) {
+    if (IsKeyDown(KEY_ONE)) player.inventory.selected = 0;
+    if (IsKeyDown(KEY_TWO)) player.inventory.selected = 1;
+    if (IsKeyDown(KEY_THREE)) player.inventory.selected = 2;
+    if (IsKeyDown(KEY_FOUR)) player.inventory.selected = 3;
+    if (IsKeyDown(KEY_FIVE)) player.inventory.selected = 4;
+    if (IsKeyDown(KEY_SIX)) player.inventory.selected = 5;
+    if (IsKeyDown(KEY_SEVEN)) player.inventory.selected = 6;
+    if (IsKeyDown(KEY_EIGHT)) player.inventory.selected = 7;
+    if (IsKeyDown(KEY_NINE)) player.inventory.selected = 8;
+
     if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) {
         camera.zoom += ((float)GetMouseWheelMove()*0.05f);
         if (camera.zoom > 3.0f) camera.zoom = 3.0f;
@@ -169,7 +179,7 @@ void UpdatePlayer(float delta) {
     } else {
         player.inventory.selected += GetMouseWheelMove();
         if (player.inventory.selected < 0) player.inventory.selected = 0;
-        if (player.inventory.selected > 9) player.inventory.selected = 9;
+        if (player.inventory.selected > 8) player.inventory.selected = 8;
     }
 
 	if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) player.sprinting = 0;
