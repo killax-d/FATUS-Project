@@ -5,6 +5,12 @@
 #include "./player.h"
 
 typedef struct Game {
+	int state;
+	/*
+	-1 = Main Menu
+	0 = In game
+	1 = ended
+	*/
     int gameOver;
     int paused;
     Player player;
@@ -12,6 +18,7 @@ typedef struct Game {
 
 Game* Game_new(Player player) {
     Game* g = malloc(sizeof(Game));
+    g->state = -1;
     g->gameOver = -1;
     g->paused = -1;
     g->player = player;
