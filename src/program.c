@@ -19,7 +19,7 @@ GameMap map;
 
 const int screenWidth = 800;
 const int screenHeight = 600;
-Player player = {(Vector2){OFFSET + 6.5 * TEXTURE_SCALE, OFFSET + 13 * TEXTURE_SCALE}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{}, 0, ""}, -1};
+Player player = {(Vector2){OFFSET + 6.5 * TEXTURE_SCALE, OFFSET + 13 * TEXTURE_SCALE}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{},0 , 0, ""}, -1};
 Camera2D camera = { 0 };
 char coords[20];
 
@@ -162,10 +162,15 @@ void UpdateGame(void) {
 
 // Update player (one frame)
 void UpdatePlayer(float delta) {
-    camera.zoom += ((float)GetMouseWheelMove()*0.05f);
-
-    if (camera.zoom > 3.0f) camera.zoom = 3.0f;
-    else if (camera.zoom < 0.25f) camera.zoom = 0.25f;
+    if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) {
+        camera.zoom += ((float)GetMouseWheelMove()*0.05f);
+        if (camera.zoom > 3.0f) camera.zoom = 3.0f;
+        else if (camera.zoom < 0.25f) camera.zoom = 0.25f;
+    } else {
+        player.inventory.selected += GetMouseWheelMove();
+        if (player.inventory.selected < 0) player.inventory.selected = 0;
+        if (player.inventory.selected > 9) player.inventory.selected = 9;
+    }
 
 	if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) player.sprinting = 0;
 	else player.sprinting = -1;
@@ -235,11 +240,15 @@ void DrawGame(void) {
             DrawRectangle(player.position.x - 20, player.position.y - 20, 40, 40, RED);
         EndMode2D();
 
+        Inventory_draw(20, GetScreenHeight() - 20 - 48, player.inventory);
+
         DrawFPS(GetScreenWidth()-80, 10);
         DrawText("Touches :", 20, 20, 10, WHITE);
         DrawText("- ZQSD ou Flèches pour se diriger", 40, 40, 10, WHITE);
         DrawText("- Shift pour sprinter", 40, 60, 10, WHITE);
-        DrawText(coords, 20, 80, 10, DARKGRAY);
+        DrawText("- Molette changer d'item", 40, 80, 10, WHITE);
+        DrawText("- Ctrl + Molette pour zoomer", 40, 100, 10, WHITE);
+        DrawText(coords, GetScreenWidth()-60, 40, 10, DARKGRAY);
 
     EndDrawing();
 }
