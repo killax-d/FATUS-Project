@@ -16,11 +16,12 @@
 // SPRITES
 #define TEXTURE_SCALE 48
 #define OFFSET 96
+#define FRAME_RATE 8 //How many frames before switching animations
 GameMap map;
 
 const int screenWidth = 800;
 const int screenHeight = 600;
-Player player = {(Vector2){OFFSET + 6.5 * TEXTURE_SCALE, OFFSET + 13 * TEXTURE_SCALE}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{},0 , 0, ""}, -1};
+Player player = {(Vector2){OFFSET + 6.5 * TEXTURE_SCALE, OFFSET + 13 * TEXTURE_SCALE}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{},0 , 0, ""}, -1, 0, -1, {}};
 Camera2D camera = { 0 };
 char coords[30];
 
@@ -105,6 +106,7 @@ void InitGame() {
     camera.zoom = 1.0f;
 
     logger(LOG_INFO, "Initializing sprites", "");
+    player.texture = LoadTexture("assets/sprite_player.png");
 
     // INIT SPRITES
     Sprite sprite[] = {
@@ -151,6 +153,7 @@ void InitGame() {
     logger(LOG_INFO, "Copying sprites...", "");
     for (int i = 0; i < map.size; i++) map.sprite[i] = sprite[i];
     logger(LOG_INFO, "Initializing map ended", "");
+
 }
 
 // Update game (one frame)
@@ -233,6 +236,7 @@ void UpdatePlayer(float delta) {
     bool LEFT = (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A));
     bool RIGHT = (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D));
 
+    // Limit diagonal movements
     if ((UP || DOWN) 
         && (LEFT || RIGHT)
         && !(LEFT && RIGHT))
@@ -247,6 +251,18 @@ void UpdatePlayer(float delta) {
     // RIGHT AND LEFT
     if (RIGHT && !collisions[1]) player.position.x += speed.x;
     if (LEFT && !collisions[3]) player.position.x -= speed.x;
+
+    // Anim sprite if moving
+    if (UP | DOWN | LEFT | RIGHT)
+    {
+        player.walkSprite += 1;
+        player.walkSprite %= FRAME_RATE*3;
+    }
+
+    // Change sprite direction
+    if (LEFT) player.direction = 1;
+    else if (RIGHT) player.direction = 0;
+
     camera.offset = player.position;
 }
 
@@ -260,7 +276,7 @@ void DrawGame(void) {
             // DRAW MAP
             for (int i = 0; i < map.size; i++) DrawRectangleRec(map.sprite[i].rect, map.sprite[i].color);
 
-            DrawRectangle(player.position.x - 20, player.position.y - 20, 40, 40, RED);
+            DrawTextureRec(player.texture, (Rectangle){ 0.0f + ((player.walkSprite == -1)?0:40*floor(player.walkSprite/FRAME_RATE)), 0.0f + 40 * player.direction, 40.0f, 40.0f }, (Vector2){player.position.x - 20, player.position.y - 20}, WHITE);
         EndMode2D();
 
         Inventory_draw(20, GetScreenHeight() - 20 - 48, player.inventory);
