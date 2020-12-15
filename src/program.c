@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "stdio.h"
 #include <time.h>
+#include <math.h>
 
 #include "./includes/player.h"
 #include "./includes/item.h"
@@ -227,13 +228,25 @@ void UpdatePlayer(float delta) {
         }
     }
 
+    bool UP = (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W));
+    bool DOWN = (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S));
+    bool LEFT = (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A));
+    bool RIGHT = (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D));
+
+    if ((UP || DOWN) 
+        && (LEFT || RIGHT)
+        && !(LEFT && RIGHT))
+    {
+        speed = (Vector2) {(speed.x*0.7), (speed.y*0.7)};
+    }
+
 	// Note: Keyboard mapping is only QWERTY
     // UP AND DOWN
-    if ((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) && !collisions[0]) player.position.y -= speed.y;
-    if ((IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) && !collisions[2]) player.position.y += speed.y;
+    if (UP && !collisions[0]) player.position.y -= speed.y;
+    if (DOWN && !collisions[2]) player.position.y += speed.y;
     // RIGHT AND LEFT
-    if ((IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) && !collisions[1]) player.position.x += speed.x;
-    if ((IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) && !collisions[3]) player.position.x -= speed.x;
+    if (RIGHT && !collisions[1]) player.position.x += speed.x;
+    if (LEFT && !collisions[3]) player.position.x -= speed.x;
     camera.offset = player.position;
 }
 
