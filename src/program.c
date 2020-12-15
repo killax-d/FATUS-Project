@@ -21,7 +21,7 @@ const int screenWidth = 800;
 const int screenHeight = 600;
 Player player = {(Vector2){OFFSET + 6.5 * TEXTURE_SCALE, OFFSET + 13 * TEXTURE_SCALE}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{},0 , 0, ""}, -1};
 Camera2D camera = { 0 };
-char coords[20];
+char coords[30];
 
 // Custom logger
 static void logger(int msgType, const char *text, va_list args)
