@@ -177,7 +177,7 @@ void UpdatePlayer(float delta) {
         if (camera.zoom > 3.0f) camera.zoom = 3.0f;
         else if (camera.zoom < 0.25f) camera.zoom = 0.25f;
     } else {
-        player.inventory.selected += GetMouseWheelMove();
+        player.inventory.selected -= GetMouseWheelMove();
         if (player.inventory.selected < 0) player.inventory.selected = 0;
         if (player.inventory.selected > 8) player.inventory.selected = 8;
     }
