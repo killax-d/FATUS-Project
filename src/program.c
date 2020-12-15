@@ -1,25 +1,29 @@
 #include "raylib.h"
 #include "stdio.h"
 #include <time.h>
+#include <math.h>
 
 #include "./includes/player.h"
 #include "./includes/item.h"
 #include "./includes/inventory.h"
 #include "./includes/game.h"
+#include "./includes/sprite.h"
+#include "./includes/map.h"
 
 #define G 400
 #define PLAYER_JUMP_SPD 350.0f
 
+// SPRITES
+#define TEXTURE_SCALE 48
+#define OFFSET 96
+#define FRAME_RATE 8 //How many frames before switching animations
+GameMap map;
+
 const int screenWidth = 800;
 const int screenHeight = 600;
-Player player = {(Vector2){200, 200}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{}, 0, ""}, -1};
+Player player = {(Vector2){OFFSET + 6.5 * TEXTURE_SCALE, OFFSET + 13 * TEXTURE_SCALE}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{},0 , 0, ""}, -1, 0, -1, {}};
 Camera2D camera = { 0 };
-char coords[20];
-
-// INIT MAP GRID
-#define MAP_X_LENGTH 12
-#define MAP_Y_LENGTH 9
-Color map[MAP_Y_LENGTH][MAP_X_LENGTH];
+char coords[30];
 
 // Custom logger
 static void logger(int msgType, const char *text, va_list args)
@@ -53,7 +57,7 @@ static void UpdatePlayer(float delta);                      // Update player (on
 static void DrawGame(void);                                 // Draw game (one frame)
 static void UnloadGame(void);                               // Unload game
 static void UpdateDrawFrame(void);                          // Update and Draw (one frame)
-void UpdateCameraCenter(Camera2D *camera, Player *player, int width, int height);
+static void UpdateCameraCenter();
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -101,57 +105,189 @@ void InitGame() {
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
 
-    // GENERATE MAP
-	for (int y = 0; y < MAP_Y_LENGTH; y++) {
-		for (int x = 0; x < MAP_X_LENGTH; x++) {
-			map[y][x] = (Color){125, 125, 125, 255};
-		}
-	}
+    logger(LOG_INFO, "Initializing sprites", "");
+    player.texture = LoadTexture("assets/sprite_player.png");
+
+    // INIT SPRITES
+    Sprite sprite[] = {
+        {{0, 0, 0, 0 }, 0, BLACK },
+        {{ OFFSET + 1 * TEXTURE_SCALE, OFFSET + 8 * TEXTURE_SCALE, 12 * TEXTURE_SCALE, 10 * TEXTURE_SCALE }, 0, LIGHTGRAY },
+        {{ OFFSET + 1 * TEXTURE_SCALE, OFFSET + 24 * TEXTURE_SCALE, 12 * TEXTURE_SCALE, 10 * TEXTURE_SCALE }, 0, LIGHTGRAY },
+        {{ OFFSET + 13 * TEXTURE_SCALE, OFFSET + 8 * TEXTURE_SCALE, 14 * TEXTURE_SCALE, 26 * TEXTURE_SCALE }, 0, LIGHTGRAY },
+        {{ OFFSET + 27 * TEXTURE_SCALE, OFFSET + 13 * TEXTURE_SCALE, 59 * TEXTURE_SCALE, 16 * TEXTURE_SCALE }, 0, LIGHTGRAY },
+        {{ OFFSET + 40 * TEXTURE_SCALE, OFFSET + 1 * TEXTURE_SCALE, 25 * TEXTURE_SCALE, 12 * TEXTURE_SCALE }, 0, LIGHTGRAY },
+        {{ OFFSET + 40 * TEXTURE_SCALE, OFFSET + 29 * TEXTURE_SCALE, 25 * TEXTURE_SCALE, 12 * TEXTURE_SCALE }, 0, LIGHTGRAY },
+        {{ OFFSET + 34 * TEXTURE_SCALE, OFFSET + 1 * TEXTURE_SCALE, 6 * TEXTURE_SCALE, 5 * TEXTURE_SCALE }, 0, LIGHTGRAY },
+        {{ OFFSET + 34 * TEXTURE_SCALE, OFFSET + 36 * TEXTURE_SCALE, 6 * TEXTURE_SCALE, 5 * TEXTURE_SCALE }, 0, LIGHTGRAY },
+        {{ OFFSET + 0 * TEXTURE_SCALE, OFFSET + 7 * TEXTURE_SCALE, 28 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 0 * TEXTURE_SCALE, OFFSET + 34 * TEXTURE_SCALE, 28 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 0 * TEXTURE_SCALE, OFFSET + 18 * TEXTURE_SCALE, 12 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 0 * TEXTURE_SCALE, OFFSET + 23 * TEXTURE_SCALE, 12 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 28 * TEXTURE_SCALE, OFFSET + 12 * TEXTURE_SCALE, 20 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 28 * TEXTURE_SCALE, OFFSET + 29 * TEXTURE_SCALE, 20 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 56 * TEXTURE_SCALE, OFFSET + 12 * TEXTURE_SCALE, 31 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 56 * TEXTURE_SCALE, OFFSET + 29 * TEXTURE_SCALE, 31 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 33 * TEXTURE_SCALE, OFFSET + 0 * TEXTURE_SCALE, 33 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 33 * TEXTURE_SCALE, OFFSET + 41 * TEXTURE_SCALE, 33 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 33 * TEXTURE_SCALE, OFFSET + 6 * TEXTURE_SCALE, 7 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 33 * TEXTURE_SCALE, OFFSET + 35 * TEXTURE_SCALE, 7 * TEXTURE_SCALE, 1 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 0 * TEXTURE_SCALE, OFFSET + 8 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 10 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 0 * TEXTURE_SCALE, OFFSET + 24 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 10 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 12 * TEXTURE_SCALE, OFFSET + 8 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 3 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 12 * TEXTURE_SCALE, OFFSET + 31 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 3 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 12 * TEXTURE_SCALE, OFFSET + 15 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 12 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 27 * TEXTURE_SCALE, OFFSET + 8 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 10 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 27 * TEXTURE_SCALE, OFFSET + 24 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 10 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 33 * TEXTURE_SCALE, OFFSET + 1 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 5 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 33 * TEXTURE_SCALE, OFFSET + 36 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 5 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 39 * TEXTURE_SCALE, OFFSET + 7 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 5 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 39 * TEXTURE_SCALE, OFFSET + 30 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 5 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 65 * TEXTURE_SCALE, OFFSET + 1 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 17 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 65 * TEXTURE_SCALE, OFFSET + 24 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 17 * TEXTURE_SCALE }, 1, GRAY },
+        {{ OFFSET + 86 * TEXTURE_SCALE, OFFSET + 13 * TEXTURE_SCALE, 1 * TEXTURE_SCALE, 16 * TEXTURE_SCALE }, 1, GRAY }
+    };
+
+    logger(LOG_INFO, "Initializing sprites ended", "");
+    logger(LOG_INFO, "Initializing map", "");
+    map = (GameMap){sizeof(sprite)/sizeof(sprite[0])};
+    logger(LOG_INFO, "Copying sprites...", "");
+    for (int i = 0; i < map.size; i++) map.sprite[i] = sprite[i];
+    logger(LOG_INFO, "Initializing map ended", "");
+
 }
 
 // Update game (one frame)
 void UpdateGame(void) {
     float deltaTime = GetFrameTime();
     UpdatePlayer(deltaTime);
-    UpdateCameraCenter(&camera, &player, screenWidth, screenHeight);
-    sprintf(coords, "X: %.2f\nY: %.2f", player.position.x, player.position.y);
+    UpdateCameraCenter();
+    sprintf(coords, "X: %.2f\nY: %.2f", camera.target.x, camera.target.y);
 }
 
 // Update player (one frame)
 void UpdatePlayer(float delta) {
+    if (IsKeyDown(KEY_ONE)) player.inventory.selected = 0;
+    if (IsKeyDown(KEY_TWO)) player.inventory.selected = 1;
+    if (IsKeyDown(KEY_THREE)) player.inventory.selected = 2;
+    if (IsKeyDown(KEY_FOUR)) player.inventory.selected = 3;
+    if (IsKeyDown(KEY_FIVE)) player.inventory.selected = 4;
+    if (IsKeyDown(KEY_SIX)) player.inventory.selected = 5;
+    if (IsKeyDown(KEY_SEVEN)) player.inventory.selected = 6;
+    if (IsKeyDown(KEY_EIGHT)) player.inventory.selected = 7;
+    if (IsKeyDown(KEY_NINE)) player.inventory.selected = 8;
+
+    if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) {
+        camera.zoom += ((float)GetMouseWheelMove()*0.05f);
+        if (camera.zoom > 3.0f) camera.zoom = 3.0f;
+        else if (camera.zoom < 0.25f) camera.zoom = 0.25f;
+    } else {
+        player.inventory.selected -= GetMouseWheelMove();
+        if (player.inventory.selected < 0) player.inventory.selected = 0;
+        if (player.inventory.selected > 8) player.inventory.selected = 8;
+    }
+
 	if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) player.sprinting = 0;
 	else player.sprinting = -1;
 
+    Vector2 speed = {player.speed.x * ((player.sprinting) ? 1.f : player.acceleration) * delta,
+                    player.speed.y * ((player.sprinting) ? 1.f : player.acceleration) * delta};
+
+    int collisions[] = {0, 0, 0, 0}; // NORTH EAST SOUTH WEST
+
+    for (int i = 0; i < map.size; i++) {
+        Sprite ei = map.sprite[i];
+        Vector2 p = player.position;
+        if (ei.blocking &&
+            ei.rect.y + ei.rect.height <= p.y+20 &&
+            ei.rect.y + ei.rect.height >= p.y-20 &&
+            ei.rect.x <= p.x+20-speed.x &&
+            ei.rect.x + ei.rect.width >= p.x-20+speed.x)
+        {
+            collisions[0] = 1;
+        }
+        if (ei.blocking &&
+            ei.rect.x <= p.x+20 &&
+            ei.rect.x > p.x-20 &&
+            ei.rect.y <= p.y+20-speed.y &&
+            ei.rect.y + ei.rect.height >= p.y-20+speed.y)
+        {
+            collisions[1] = 1;
+        }
+        if (ei.blocking &&
+            ei.rect.y <= p.y+20 &&
+            ei.rect.y > p.y-20 &&
+            ei.rect.x <= p.x+20-speed.x &&
+            ei.rect.x + ei.rect.width >= p.x-20+speed.x)
+        {
+            collisions[2] = 1;
+        }
+        if (ei.blocking &&
+            ei.rect.x + ei.rect.width <= p.x+20 &&
+            ei.rect.x + ei.rect.width >= p.x-20 &&
+            ei.rect.y <= p.y+20-speed.y &&
+            ei.rect.y + ei.rect.height >= p.y-20+speed.y)
+        {
+            collisions[3] = 1;
+        }
+    }
+
+    bool UP = (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W));
+    bool DOWN = (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S));
+    bool LEFT = (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A));
+    bool RIGHT = (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D));
+
+    // Limit diagonal movements
+    if ((UP || DOWN) 
+        && (LEFT || RIGHT)
+        && !(LEFT && RIGHT))
+    {
+        speed = (Vector2) {(speed.x*0.7), (speed.y*0.7)};
+    }
+
 	// Note: Keyboard mapping is only QWERTY
-    // LEFT AND RIGHT
-    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) player.position.x -= player.speed.x * ((player.sprinting) ? 1.f : player.acceleration) * delta;
-    if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) player.position.x += player.speed.x * ((player.sprinting) ? 1.f : player.acceleration) * delta;
     // UP AND DOWN
-    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) player.position.y -= player.speed.y * ((player.sprinting) ? 1.f : player.acceleration) * delta;
-    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) player.position.y += player.speed.y * ((player.sprinting) ? 1.f : player.acceleration) * delta;
+    if (UP && !collisions[0]) player.position.y -= speed.y;
+    if (DOWN && !collisions[2]) player.position.y += speed.y;
+    // RIGHT AND LEFT
+    if (RIGHT && !collisions[1]) player.position.x += speed.x;
+    if (LEFT && !collisions[3]) player.position.x -= speed.x;
+
+    // Anim sprite if moving
+    if (UP | DOWN | LEFT | RIGHT)
+    {
+        player.walkSprite += 1;
+        player.walkSprite %= FRAME_RATE*3;
+    }
+
+    // Change sprite direction
+    if (LEFT) player.direction = 1;
+    else if (RIGHT) player.direction = 0;
+
+    camera.offset = player.position;
 }
 
 // Draw game (one frame)
 void DrawGame(void) {
     BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
 
-        DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+        BeginMode2D(camera);
+            // DRAW MAP
+            for (int i = 0; i < map.size; i++) DrawRectangleRec(map.sprite[i].rect, map.sprite[i].color);
 
-        // DRAW MAP GRID
-		for (int y = 0; y < MAP_Y_LENGTH; y++) {
-			for (int x = 0; x < MAP_X_LENGTH; x++) {
-		        DrawRectangle(x * 64, y * 64, 64, 64, map[y][x]);
-		        DrawRectangleLines(x * 64, y * 64, 64, 64, BLUE);
-			}
-		}
+            DrawTextureRec(player.texture, (Rectangle){ 0.0f + ((player.walkSprite == -1)?0:40*floor(player.walkSprite/FRAME_RATE)), 0.0f + 40 * player.direction, 40.0f, 40.0f }, (Vector2){player.position.x - 20, player.position.y - 20}, WHITE);
+        EndMode2D();
 
-        DrawRectangle(player.position.x, player.position.y, 48, 96, GREEN);
-        DrawRectangleLines(player.position.x, player.position.y, 48, 96, RED);
+        Inventory_draw(20, GetScreenHeight() - 20 - 48, player.inventory);
 
-        DrawFPS(10, 10);
-        DrawText(coords, 10, 32, 16, WHITE);
+        DrawFPS(GetScreenWidth()-80, 10);
+        DrawText("Touches :", 20, 20, 10, WHITE);
+        DrawText("- ZQSD ou Flèches pour se diriger", 40, 40, 10, WHITE);
+        DrawText("- Shift pour sprinter", 40, 60, 10, WHITE);
+        DrawText("- Molette changer d'item", 40, 80, 10, WHITE);
+        DrawText("- Ctrl + Molette pour zoomer", 40, 100, 10, WHITE);
+        DrawText(coords, GetScreenWidth()-60, 40, 10, DARKGRAY);
 
     EndDrawing();
 }
@@ -168,9 +304,8 @@ void UpdateDrawFrame(void)
     DrawGame();
 }
 
-// Camera center
-void UpdateCameraCenter(Camera2D *camera, Player *player, int width, int height)
+void UpdateCameraCenter()
 {
-    camera->offset = (Vector2){ width/2, height/2 };
-    camera->target = player->position;
+    camera.target = player.position;
+    camera.offset = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
 }
