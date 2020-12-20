@@ -3,15 +3,19 @@
 
 typedef struct Sprite {
     Rectangle rect;
-    int blocking;
+    bool blocking;
     Color color;
+    bool hasTexture;
+    Texture2D texture;
 } Sprite;
 
-Sprite* Sprite_new(Rectangle rect, int blocking, Color color) {
+Sprite* Sprite_new(Rectangle rect, bool blocking, Color color, bool hasTexture, Texture2D texture) {
     Sprite* s = malloc(sizeof(Sprite));
     s->rect = rect;
     s->blocking = blocking;
     s->color = color;
+    s->hasTexture = hasTexture;
+    s->texture = texture;
     return s;
 }
 
