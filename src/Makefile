@@ -4,6 +4,7 @@ all: directories program
 
 directories: 
 	rm -rf ../$(OUTPUT)
+	rm -rf ../src/*.o
 	mkdir -p ../$(OUTPUT)
 	mkdir -p assets
 	cp -r assets ../$(OUTPUT)
