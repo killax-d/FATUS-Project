@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "stdlib.h"
 #include "./player.h"
+#include "./map.h"
 
 typedef struct Game {
 	int state;
@@ -13,6 +14,7 @@ typedef struct Game {
 	*/
     int gameOver;
     int paused;
+    GameMap map;
     Player player;
 } Game;
 
