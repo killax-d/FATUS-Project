@@ -19,7 +19,7 @@ GameMap map;
 
 const int screenWidth = 800;
 const int screenHeight = 600;
-Player player = {(Vector2){MAP_TEXTURE_SCALE * (MAP_WIDTH/2), MAP_TEXTURE_SCALE * (MAP_HEIGHT/2)}, (Vector2){200.f, 200.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{},0 , 0, ""}, -1, 0, -1, {}};
+Player player = {(Vector2){MAP_TEXTURE_SCALE * (MAP_WIDTH/2), MAP_TEXTURE_SCALE * (MAP_HEIGHT/2)}, (Vector2){200.f, 200.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{},0 , 0, "", ""}, -1, 0, -1, {}};
 Camera2D camera = { 0 };
 Game game = (Game) {};
 char coords[30];
@@ -247,6 +247,8 @@ void UpdatePlayer(float delta) {
         if (player.inventory.selected < 0) player.inventory.selected = 0;
         if (player.inventory.selected > 8) player.inventory.selected = 8;
     }
+
+    sprintf(player.inventory.selectedText, "Selected: %s", player.inventory.items[player.inventory.selected].name);
 
 	player.sprinting = IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT);
 
