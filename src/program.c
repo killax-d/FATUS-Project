@@ -14,14 +14,12 @@
 #define PLAYER_JUMP_SPD 350.0f
 
 // SPRITES
-#define TEXTURE_SCALE 48
-#define OFFSET 96
 #define FRAME_RATE 8 //How many frames before switching animations
 GameMap map;
 
 const int screenWidth = 800;
 const int screenHeight = 600;
-Player player = {(Vector2){OFFSET + 6.5 * TEXTURE_SCALE, OFFSET + 13 * TEXTURE_SCALE}, (Vector2){100.f, 100.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{},0 , 0, ""}, -1, 0, -1, {}};
+Player player = {(Vector2){MAP_TEXTURE_SCALE * (MAP_WIDTH/2), MAP_TEXTURE_SCALE * (MAP_HEIGHT/2)}, (Vector2){200.f, 200.f}, 1.75f, 0.f, (Vector2){1.f, 1.f}, (Color){125, 125, 125, 255}, (Inventory){{},0 , 0, ""}, -1, 0, -1, {}};
 Camera2D camera = { 0 };
 Game game = (Game) {};
 char coords[30];
@@ -248,11 +246,10 @@ void UpdatePlayer(float delta) {
         if (player.inventory.selected > 8) player.inventory.selected = 8;
     }
 
-	if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) player.sprinting = 0;
-	else player.sprinting = -1;
+	player.sprinting = IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT);
 
-    Vector2 speed = {player.speed.x * ((player.sprinting) ? 1.f : player.acceleration) * delta,
-                    player.speed.y * ((player.sprinting) ? 1.f : player.acceleration) * delta};
+    Vector2 speed = {player.speed.x * ((player.sprinting) ? player.acceleration : 1.f) * delta,
+                    player.speed.y * ((player.sprinting) ? player.acceleration : 1.f) * delta};
 
     int collisions[] = {0, 0, 0, 0}; // NORTH EAST SOUTH WEST
 
