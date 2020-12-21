@@ -5,11 +5,12 @@
 
 typedef struct Item {
     int id;
-    char name;
+    char * name;
+    bool hasTexture;
     Texture2D texture;
 } Item;
 
-Item* Item_new(int id, char name, Texture2D texture) {
+Item* Item_new(int id, char * name, Texture2D texture) {
     Item* i = malloc(sizeof(Item));
     i->id = id;
     i->name = name;
@@ -22,7 +23,8 @@ void Item_delete(Item i) {
 }
 
 void Item_draw(int x, int y, Item item) {
-	DrawTexture(item.texture, x+4, y+4, (Color) {125,125,125,100});
+    if (item.hasTexture) DrawTexture(item.texture, x+4, y+4, WHITE);
+    else DrawRectangle(x+4, y+4, 40, 40, PINK);
 }
 
 #endif

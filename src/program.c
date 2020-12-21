@@ -214,6 +214,8 @@ void InitGame() {
     };
 
     IntArrayToSpriteMap(&(game.map), map);
+
+    player.inventory.items[0] = (Item) {0, "Prison Key", true, LoadTexture("assets/prison_key.png")};
 }
 
 // Update game (one frame)
