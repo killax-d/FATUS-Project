@@ -3,15 +3,19 @@
 #include "raylib.h"
 #include "stdlib.h"
 #include "./item.h"
+#define INVENTORY_SIZE 9
+#define TEXT_SELECTED_ITEM_BUFFER_LENGTH 50
 
 typedef struct Inventory {
-	Item items[9];
+	Item items[INVENTORY_SIZE];
 	int selected;
 	int nbItems;
 	char * notes;
-	char selectedText[60];
+	char selectedText[TEXT_SELECTED_ITEM_BUFFER_LENGTH];
 } Inventory;
 
-void Inventory_draw(int x, int y, Inventory inv);
+Inventory * Inventory_new();
+
+void Inventory_draw(int x, int y, Inventory * inv);
 
 #endif

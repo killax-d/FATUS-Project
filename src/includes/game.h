@@ -14,8 +14,8 @@ typedef struct Game {
 	*/
     int gameOver;
     int paused;
-    GameMap map;
-    Player player;
+    GameMap * map;
+    Player * player;
 } Game;
 
 void Game_initMap(Game * game);

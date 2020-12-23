@@ -13,12 +13,14 @@ typedef struct Player {
     float rotation;
     Vector2 collider;
     Color color;
-    Inventory inventory;
+    Inventory * inventory;
     bool sprinting;
     int direction;
     int walkSprite;
     Texture2D texture;
 } Player;
+
+void Player_init(Player * player);
 
 void Player_draw(Player * player);
 
