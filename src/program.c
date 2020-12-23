@@ -115,15 +115,8 @@ void UpdateGame(Camera2D * camera, Game * game, Player * player, char coords[COO
 // Update player (one frame)
 void UpdatePlayer(Camera2D * camera, Game * game, Player * player, float delta) {
     // Key switch (inventory)
-    if (IsKeyDown(KEY_ONE)) player->inventory->selected = 0;
-    if (IsKeyDown(KEY_TWO)) player->inventory->selected = 1;
-    if (IsKeyDown(KEY_THREE)) player->inventory->selected = 2;
-    if (IsKeyDown(KEY_FOUR)) player->inventory->selected = 3;
-    if (IsKeyDown(KEY_FIVE)) player->inventory->selected = 4;
-    if (IsKeyDown(KEY_SIX)) player->inventory->selected = 5;
-    if (IsKeyDown(KEY_SEVEN)) player->inventory->selected = 6;
-    if (IsKeyDown(KEY_EIGHT)) player->inventory->selected = 7;
-    if (IsKeyDown(KEY_NINE)) player->inventory->selected = 8;
+    int keys[] = {KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_FIVE, KEY_SIX, KEY_SEVEN, KEY_EIGHT, KEY_NINE};
+    for (int i = 0; i < 9; i++) if (IsKeyDown(keys[i])) player->inventory->selected = keys[i] - KEY_ONE;
 
     if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) {
         // Zoom control
@@ -148,13 +141,29 @@ void UpdatePlayer(Camera2D * camera, Game * game, Player * player, float delta) 
     Vector2 speed = {player->speed.x * ((player->sprinting) ? player->acceleration : 1.f) * delta,
                     player->speed.y * ((player->sprinting) ? player->acceleration : 1.f) * delta};
 
+
+    // Check movements
+    bool UP = (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W));
+    bool DOWN = (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S));
+    bool LEFT = (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A));
+    bool RIGHT = (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D));
+
+    // Limit diagonal movements
+    if ((UP || DOWN) 
+        && (LEFT || RIGHT)
+        && !(LEFT && RIGHT))
+    {
+        // remove 30% of the saved speed
+        speed = (Vector2) {(speed.x*0.7), (speed.y*0.7)};
+    }
+
     // Save collisions with directions
     int collisions[] = {0, 0, 0, 0}; // NORTH EAST SOUTH WEST
 
     // Check all collisions with 3 blocs width
     for (int i = -1; i <= 1; i++) {
         // Retrieve the player position in the map 2D Array
-        int location[2] = {(int) (player->position.x/32), (int) (player->position.y/32)};
+        int location[2] = {(int) (player->position.x/MAP_TEXTURE_SCALE), (int) (player->position.y/MAP_TEXTURE_SCALE)};
 
         // Retrieve current position of player
         Vector2 p = player->position;
@@ -218,21 +227,6 @@ void UpdatePlayer(Camera2D * camera, Game * game, Player * player, float delta) 
         {
             collisions[3] = 1;
         }
-    }
-
-    // Check movements
-    bool UP = (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W));
-    bool DOWN = (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S));
-    bool LEFT = (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A));
-    bool RIGHT = (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D));
-
-    // Limit diagonal movements
-    if ((UP || DOWN) 
-        && (LEFT || RIGHT)
-        && !(LEFT && RIGHT))
-    {
-        // remove 30% of the saved speed
-        speed = (Vector2) {(speed.x*0.7), (speed.y*0.7)};
     }
 
 	// Note: Keyboard mapping is only QWERTY
