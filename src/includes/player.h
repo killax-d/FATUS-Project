@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "stdlib.h"
 #include "./inventory.h"
+#include <math.h>
+#define FRAME_RATE 8 //How many frames before switching animations
 
 typedef struct Player {
     Vector2 position;
@@ -18,24 +20,6 @@ typedef struct Player {
     Texture2D texture;
 } Player;
 
-Player* Player_new(Vector2 position, Vector2 speed, float acceleration, float rotation, Vector2 collider, Color color, Inventory inventory, bool sprinting, Texture2D texture) {
-    Player* p = malloc(sizeof(Player));
-    p->position = position;
-    p->speed = speed;
-    p->acceleration = acceleration;
-    p->rotation = rotation;
-    p->collider = collider;
-    p->color = color;
-    p->inventory = inventory;
-    p->sprinting = sprinting;
-    p->direction = 0;
-    p->walkSprite = -1;
-    p->texture = texture;
-    return p;
-}
-
-void Player_delete(Player p) {
-    free(&p);
-}
+void Player_draw(Player * player);
 
 #endif
