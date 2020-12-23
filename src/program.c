@@ -69,9 +69,6 @@ int main(void)
     Player_init(&player);
     InitGame(&camera, &game, &player);
 
-#if defined(PLATFORM_WEB)
-    emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
-#else
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
     
@@ -83,7 +80,6 @@ int main(void)
         UpdateDrawFrame(&camera, &game, &player, coords);
         //----------------------------------------------------------------------------------
     }
-#endif
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadGame();         // Unload loaded data (textures, sounds, models...)
