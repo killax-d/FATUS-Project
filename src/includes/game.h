@@ -18,6 +18,6 @@ typedef struct Game {
     Player * player;
 } Game;
 
-void Game_initMap(Game * game);
+void Game_init(Game * game);
 
 #endif

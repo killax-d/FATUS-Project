@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include <stdio.h>
+#include <stdarg.h>
 #include <time.h>
 #include <math.h>
 
@@ -21,9 +22,9 @@ static void logger(int msgType, const char *text, va_list args)
     switch (msgType)
     {
         case LOG_INFO: printf("[INFO] : "); break;
-        case LOG_ERROR: printf("[ERROR]: "); break;
+        case LOG_ERROR: printf("[ERROR] : "); break;
         case LOG_WARNING: printf("[WARN] : "); break;
-        case LOG_DEBUG: printf("[DEBUG]: "); break;
+        case LOG_DEBUG: printf("[DEBUG] : "); break;
         default: break;
     }
 
@@ -35,26 +36,25 @@ static void logger(int msgType, const char *text, va_list args)
 // Module Functions Declaration (local)
 //------------------------------------------------------------------------------------
 // Initialize game
-static void InitGame(Camera2D * camera, Game * game, Player * player);
+static void InitGame(Camera2D * camera, Game * game);
 // Update game (one frame)
-static void UpdateGame(Camera2D * camera, Game * game, Player * player, char coords[COORDS_BUFFER_LENGTH]);
+static void UpdateGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]);
 // Update player (one frame)
-static void UpdatePlayer(Camera2D * camera, Game * game, Player * player, float delta);
+static void UpdatePlayer(Camera2D * camera, Game * game, float delta);
 // Draw game (one frame)
-static void DrawGame(Camera2D * camera, Game * game, Player * player, char coords[COORDS_BUFFER_LENGTH]);
+static void DrawGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]);
 // Unload game
-static void UnloadGame(void); 
+static void UnloadGame(Camera2D * camera, Game * game); 
 // Update and Draw (one frame)
-static void UpdateDrawFrame(Camera2D * camera, Game * game, Player * player, char coords[COORDS_BUFFER_LENGTH]);
+static void UpdateDrawFrame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]);
 // Update camera position
-static void UpdateCameraCenter(Camera2D * camera, Player * player);
+static void UpdateCameraCenter(Camera2D * camera, Game * game);
 
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void)
 {
-    Player player;
     Camera2D camera = {0};
     Game game;
     char coords[COORDS_BUFFER_LENGTH];
@@ -66,8 +66,7 @@ int main(void)
     SetTraceLogCallback(logger);
     InitWindow(WINDOW_BASE_WIDTH, WINDOW_BASE_HEIGHT, "50NuancesDeCodes - by IMT GRAY TEAM");
 
-    Player_init(&player);
-    InitGame(&camera, &game, &player);
+    InitGame(&camera, &game);
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
@@ -77,12 +76,12 @@ int main(void)
     {
         // Update and Draw
         //----------------------------------------------------------------------------------
-        UpdateDrawFrame(&camera, &game, &player, coords);
+        UpdateDrawFrame(&camera, &game, coords);
         //----------------------------------------------------------------------------------
     }
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadGame();         // Unload loaded data (textures, sounds, models...)
+    UnloadGame(&camera, &game);     // Unload loaded data (textures, sounds, models...)
     
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
@@ -91,166 +90,34 @@ int main(void)
 }
 
 // Initialize game variables
-void InitGame(Camera2D * camera, Game * game, Player * player) {
-    camera->target = player->position;
+void InitGame(Camera2D * camera, Game * game) {
+    camera->target = game->player->position;
     camera->offset = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
     camera->rotation = 0.0f;
     camera->zoom = 1.0f;
 
-    // INIT MAP
-    Game_initMap(game);
-    Player_init(player);
+    // INIT GAME
+    Game_init(game);
 
-    player->inventory->items[0] = (Item) {0, "Prison Key", true, LoadTexture("assets/prison_key.png")};
+    game->player->inventory->items[0] = (Item) {0, "Prison Key", true, LoadTexture("assets/prison_key.png")};
 }
 
 // Update game (one frame)
-void UpdateGame(Camera2D * camera, Game * game, Player * player, char coords[COORDS_BUFFER_LENGTH]) {
+void UpdateGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]) {
     float deltaTime = GetFrameTime();
-    UpdatePlayer(camera, game, player, deltaTime);
-    UpdateCameraCenter(camera, player);
+    UpdatePlayer(camera, game, deltaTime);
+    UpdateCameraCenter(camera, game);
     sprintf(coords, "X: %.2f\nY: %.2f", camera->target.x, camera->target.y);
 }
 
 // Update player (one frame)
-void UpdatePlayer(Camera2D * camera, Game * game, Player * player, float delta) {
-    // Key switch (inventory)
-    int keys[] = {KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_FIVE, KEY_SIX, KEY_SEVEN, KEY_EIGHT, KEY_NINE};
-    for (int i = 0; i < 9; i++) if (IsKeyDown(keys[i])) player->inventory->selected = keys[i] - KEY_ONE;
-
-    if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) {
-        // Zoom control
-        camera->zoom += ((float)GetMouseWheelMove()*0.05f);
-        if (camera->zoom > 3.0f) camera->zoom = 3.0f;
-        else if (camera->zoom < 0.25f) camera->zoom = 0.25f;
-    } else { 
-        // Mouse Wheel switch (inventory)
-        player->inventory->selected -= GetMouseWheelMove();
-        if (player->inventory->selected < 0) player->inventory->selected = 0;
-        if (player->inventory->selected > 8) player->inventory->selected = 8;
-    }
-
-    // Update selected item (inventory draw the name of item)
-    if (player->inventory->items[player->inventory->selected].name != 0x0)
-        sprintf(player->inventory->selectedText, "Selected: %s", player->inventory->items[player->inventory->selected].name);
-
-    // Is player sprinting ?
-	player->sprinting = IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT);
-
-    // Save temporary the speed with sprinting calculated, if need to decrease (diagonal speed fix)
-    Vector2 speed = {player->speed.x * ((player->sprinting) ? player->acceleration : 1.f) * delta,
-                    player->speed.y * ((player->sprinting) ? player->acceleration : 1.f) * delta};
-
-
-    // Check movements
-    bool UP = (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W));
-    bool DOWN = (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S));
-    bool LEFT = (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A));
-    bool RIGHT = (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D));
-
-    // Limit diagonal movements
-    if ((UP || DOWN) 
-        && (LEFT || RIGHT)
-        && !(LEFT && RIGHT))
-    {
-        // remove 30% of the saved speed
-        speed = (Vector2) {(speed.x*0.7), (speed.y*0.7)};
-    }
-
-    // Save collisions with directions
-    int collisions[] = {0, 0, 0, 0}; // NORTH EAST SOUTH WEST
-
-    // Check all collisions with 3 blocs width
-    for (int i = -1; i <= 1; i++) {
-        // Retrieve the player position in the map 2D Array
-        int location[2] = {(int) (player->position.x/MAP_TEXTURE_SCALE), (int) (player->position.y/MAP_TEXTURE_SCALE)};
-
-        // Retrieve current position of player
-        Vector2 p = player->position;
-        // NORTH
-        /*
-        [x, x, x]
-        [ , p,  ]
-        [ ,  ,  ]
-        */
-        Sprite ei = game->map->sprite[location[1]-1][location[0]+i];
-        if (ei.blocking &&
-            ei.rect.y + ei.rect.height <= p.y+20 &&
-            ei.rect.y + ei.rect.height >= p.y-20 &&
-            ei.rect.x <= p.x+20-speed.x &&
-            ei.rect.x + ei.rect.width >= p.x-20+speed.x)
-        {
-            collisions[0] = 1;
-        }
-        // EAST
-        /*
-        [ ,  , x]
-        [ , p, x]
-        [ ,  , x]
-        */
-        ei = game->map->sprite[location[1]+i][location[0]+1];
-        if (ei.blocking &&
-            ei.rect.x <= p.x+20 &&
-            ei.rect.x > p.x-20 &&
-            ei.rect.y <= p.y+20-speed.y &&
-            ei.rect.y + ei.rect.height >= p.y-20+speed.y)
-        {
-            collisions[1] = 1;
-        }
-        // SOUTH
-        /*
-        [ ,  ,  ]
-        [ , p,  ]
-        [x, x, x]
-        */
-        ei = game->map->sprite[location[1]+1][location[0]+i];
-        if (ei.blocking &&
-            ei.rect.y <= p.y+20 &&
-            ei.rect.y > p.y-20 &&
-            ei.rect.x <= p.x+20-speed.x &&
-            ei.rect.x + ei.rect.width >= p.x-20+speed.x)
-        {
-            collisions[2] = 1;
-        }
-        // WEST
-        /*
-        [x,  ,  ]
-        [x, p,  ]
-        [x,  ,  ]
-        */
-        ei = game->map->sprite[location[1]+i][location[0]-1];
-        if (ei.blocking &&
-            ei.rect.x + ei.rect.width <= p.x+20 &&
-            ei.rect.x + ei.rect.width >= p.x-20 &&
-            ei.rect.y <= p.y+20-speed.y &&
-            ei.rect.y + ei.rect.height >= p.y-20+speed.y)
-        {
-            collisions[3] = 1;
-        }
-    }
-
-	// Note: Keyboard mapping is only QWERTY
-    // UP AND DOWN
-    if (UP && !collisions[0]) player->position.y -= speed.y;
-    if (DOWN && !collisions[2]) player->position.y += speed.y;
-    // RIGHT AND LEFT
-    if (RIGHT && !collisions[1]) player->position.x += speed.x;
-    if (LEFT && !collisions[3]) player->position.x -= speed.x;
-
-    // Anim sprite if moving
-    if (UP | DOWN | LEFT | RIGHT)
-    {
-        player->walkSprite += 1;
-        player->walkSprite %= FRAME_RATE*3;
-    }
-
-    // Change sprite direction
-    if (LEFT) player->direction = 1;
-    else if (RIGHT) player->direction = 0;
+void UpdatePlayer(Camera2D * camera, Game * game, float delta) {
+    Player_control(camera, game->player);
+    Player_move(game->map, game->player, delta);
 }
 
 // Draw game (one frame)
-void DrawGame(Camera2D * camera, Game * game, Player * player, char coords[COORDS_BUFFER_LENGTH]) {
+void DrawGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]) {
     BeginDrawing();
 
         ClearBackground(BLACK);
@@ -260,11 +127,11 @@ void DrawGame(Camera2D * camera, Game * game, Player * player, char coords[COORD
             Map_draw(game->map);
 
             // DRAW PLAYER
-            Player_draw(player);
+            Player_draw(game->player);
         EndMode2D();
 
         // DRAW INVENTORY
-        Inventory_draw(20, GetScreenHeight() - 20 - 48, player->inventory);
+        Inventory_draw(20, GetScreenHeight() - 20 - 48, game->player->inventory);
 
         DrawFPS(GetScreenWidth()-80, 10);
         DrawText("Touches :", 20, 20, 10, WHITE);
@@ -278,19 +145,24 @@ void DrawGame(Camera2D * camera, Game * game, Player * player, char coords[COORD
 }
 
 // Unload game
-void UnloadGame(void) {
-
+void UnloadGame(Camera2D * camera, Game * game) {
+    free(&camera);
+    free(&game->player->inventory);
+    free(&game->player->collider);
+    free(&game->player);
+    free(&game->map);
+    free(&game);
 }
 
 // Update and Draw (one frame)
-void UpdateDrawFrame(Camera2D * camera, Game * game, Player * player, char coords[COORDS_BUFFER_LENGTH])
+void UpdateDrawFrame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH])
 {
-    UpdateGame(camera, game, player, coords);
-    DrawGame(camera, game, player, coords);
+    UpdateGame(camera, game, coords);
+    DrawGame(camera, game, coords);
 }
 
-void UpdateCameraCenter(Camera2D * camera, Player * player)
+void UpdateCameraCenter(Camera2D * camera, Game * game)
 {
-    camera->target = player->position;
+    camera->target = game->player->position;
     camera->offset = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
 }
