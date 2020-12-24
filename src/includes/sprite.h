@@ -1,22 +1,13 @@
 #ifndef SPRITE_H
 #define SPRITE_H
+#include "raylib.h"
 
 typedef struct Sprite {
     Rectangle rect;
-    int blocking;
+    bool blocking;
     Color color;
+    bool hasTexture;
+    Texture2D texture;
 } Sprite;
-
-Sprite* Sprite_new(Rectangle rect, int blocking, Color color) {
-    Sprite* s = malloc(sizeof(Sprite));
-    s->rect = rect;
-    s->blocking = blocking;
-    s->color = color;
-    return s;
-}
-
-void Sprite_delete(Sprite s) {
-    free(&s);
-}
 
 #endif

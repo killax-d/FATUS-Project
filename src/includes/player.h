@@ -2,40 +2,40 @@
 #define PLAYER_H
 #include "raylib.h"
 #include "stdlib.h"
+#include "./collider.h"
 #include "./inventory.h"
+#include "./map.h"
+#include <math.h>
+#define FRAME_RATE 8 //How many frames before switching animations
+#define PLAYER_SIZE 40
 
 typedef struct Player {
     Vector2 position;
     Vector2 speed;
     float acceleration;
     float rotation;
-    Vector2 collider;
+    float size;
+    Collider * collider;
     Color color;
-    Inventory inventory;
-    int sprinting;
+    Inventory * inventory;
+    bool sprinting;
     int direction;
     int walkSprite;
     Texture2D texture;
 } Player;
 
-Player* Player_new(Vector2 position, Vector2 speed, float acceleration, float rotation, Vector2 collider, Color color, Inventory inventory, int sprinting, Texture2D texture) {
-    Player* p = malloc(sizeof(Player));
-    p->position = position;
-    p->speed = speed;
-    p->acceleration = acceleration;
-    p->rotation = rotation;
-    p->collider = collider;
-    p->color = color;
-    p->inventory = inventory;
-    p->sprinting = sprinting;
-    p->direction = 0;
-    p->walkSprite = -1;
-    p->texture = texture;
-    return p;
-}
+Player * Player_new();
 
-void Player_delete(Player p) {
-    free(&p);
-}
+void Player_init(Player * player);
+
+void Player_draw(Player * player);
+
+void Player_control(Camera2D * camera, Player * player);
+
+void Player_switchItem(Player * player, int selected);
+
+void Player_move(GameMap * map, Player * player, float delta);
+
+void Player_collisions(GameMap * map, Player * player, Vector2 speed);
 
 #endif
