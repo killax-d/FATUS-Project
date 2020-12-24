@@ -12,8 +12,4 @@ typedef struct Item {
 
 void Item_draw(int x, int y, Item item);
 
-void Item_draw(int x, int y, Item item) {
-	DrawTexture(item.texture, x+4, y+4, (Color) {125,125,125,100});
-}
-
 #endif
