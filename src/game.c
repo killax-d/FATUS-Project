@@ -1,6 +1,11 @@
 #include "includes/game.h"
 
 void Game_init(Game * game) {
+    game->state = -1;
+    game->gameOver = false;
+    game->paused = false;
+    game->map = malloc(sizeof(GameMap));
+    game->player = Player_new();
 
     int map[MAP_HEIGHT][MAP_WIDTH] = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -107,8 +112,33 @@ void Game_init(Game * game) {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     };
 
-    game->map = malloc(sizeof(GameMap));
-    game->player = Player_new();
-
     IntArrayToSpriteMap(game->map, map);
+}
+
+void Game_draw(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]) {
+    BeginDrawing();
+
+        ClearBackground(BLACK);
+
+        BeginMode2D(*camera);
+            // DRAW MAP
+            Map_draw(game->map);
+
+            // DRAW PLAYER
+            Player_draw(game->player);
+        EndMode2D();
+
+        // DRAW INVENTORY
+        Inventory_draw(20, GetScreenHeight() - 20 - 48, game->player->inventory);
+
+        DrawFPS(GetScreenWidth()-80, 10);
+        DrawText("Touches :", 20, 20, 10, WHITE);
+        DrawText("- ZQSD ou Flèches pour se diriger", 40, 40, 10, WHITE);
+        DrawText("- Shift pour sprinter", 40, 60, 10, WHITE);
+        DrawText("- Molette pour changer d'item", 40, 80, 10, WHITE);
+        DrawText("- Ctrl + Molette pour zoomer", 40, 100, 10, WHITE);
+        DrawText("- E pour utiliser", 40, 120, 10, WHITE);
+        DrawText(coords, GetScreenWidth()-60, 40, 10, DARKGRAY);
+
+    EndDrawing();
 }

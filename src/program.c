@@ -6,7 +6,7 @@
 
 #include "./includes/game.h"
 #include "./includes/gameitems.h"
-#define COORDS_BUFFER_LENGTH 30
+#include "./includes/menu.h"
 #define WINDOW_BASE_WIDTH 800
 #define WINDOW_BASE_HEIGHT 600
 
@@ -98,10 +98,10 @@ void InitGame(Camera2D * camera, Game * game, GameItems * gamesItems) {
     camera->rotation = 0.0f;
     camera->zoom = 1.0f;
 
-    GameItems_init(gamesItems);
     // INIT GAME
     Game_init(game);
-
+    GameItems_init(gamesItems);
+    
     // ADD ITEMS FOR TEST
     game->player->inventory->items[0] = gamesItems->items[PRISON_KEY];
     game->player->inventory->items[1] = gamesItems->items[MAGNET_CARD];
@@ -111,11 +111,14 @@ void InitGame(Camera2D * camera, Game * game, GameItems * gamesItems) {
 
 // Update game (one frame)
 void UpdateGame(Camera2D * camera, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH]) {
-    float deltaTime = GetFrameTime();
-    GameItems_control(game, gamesItems);
-    UpdatePlayer(camera, game, deltaTime);
-    UpdateCameraCenter(camera, game);
-    sprintf(coords, "X: %.2f\nY: %.2f", camera->target.x, camera->target.y);
+    if (game->state == -1) Menu_update(game);
+    else {
+        float deltaTime = GetFrameTime();
+        GameItems_control(game, gamesItems);
+        UpdatePlayer(camera, game, deltaTime);
+        UpdateCameraCenter(camera, game);
+        sprintf(coords, "X: %.2f\nY: %.2f", camera->target.x, camera->target.y);
+    }
 }
 
 // Update player (one frame)
@@ -126,30 +129,8 @@ void UpdatePlayer(Camera2D * camera, Game * game, float delta) {
 
 // Draw game (one frame)
 void DrawGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]) {
-    BeginDrawing();
-
-        ClearBackground(BLACK);
-
-        BeginMode2D(*camera);
-            // DRAW MAP
-            Map_draw(game->map);
-
-            // DRAW PLAYER
-            Player_draw(game->player);
-        EndMode2D();
-
-        // DRAW INVENTORY
-        Inventory_draw(20, GetScreenHeight() - 20 - 48, game->player->inventory);
-
-        DrawFPS(GetScreenWidth()-80, 10);
-        DrawText("Touches :", 20, 20, 10, WHITE);
-        DrawText("- ZQSD ou Flèches pour se diriger", 40, 40, 10, WHITE);
-        DrawText("- Shift pour sprinter", 40, 60, 10, WHITE);
-        DrawText("- Molette pour changer d'item", 40, 80, 10, WHITE);
-        DrawText("- Ctrl + Molette pour zoomer", 40, 100, 10, WHITE);
-        DrawText(coords, GetScreenWidth()-60, 40, 10, DARKGRAY);
-
-    EndDrawing();
+    if (game->state == -1) Menu_draw();
+    if (game->state == 0) Game_draw(camera, game, coords);
 }
 
 // Unload game
