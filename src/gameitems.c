@@ -2,25 +2,41 @@
 
 // Prison key function
 void usePrisonKey(Game * game, Item items[MAX_ITEMS]) {
-    logger(LOG_INFO, "Using prison key!", "");
+    logger(LOG_DEBUG, "Using prison key!", "");
 }
 
 // Magnet card function
 void useMagnetCard(Game * game, Item items[MAX_ITEMS]) {
-    logger(LOG_INFO, "Using magnet card!", "");
+    logger(LOG_DEBUG, "Using magnet card!", "");
 }
 
 // Flint inactive function
 void useFlint(Game * game, Item items[MAX_ITEMS]) {
-    logger(LOG_INFO, "Using inactive flint!", "");
+    logger(LOG_DEBUG, "Using inactive flint!", "");
     game->player->inventory->items[game->player->inventory->selected] = items[FLINT_ACTIVE];
 }
 
 // Flint inactive function
 void useFlintActive(Game * game, Item items[MAX_ITEMS]) {
-    logger(LOG_INFO, "Using active flint!", "");
+    logger(LOG_DEBUG, "Using active flint!", "");
     game->player->inventory->items[game->player->inventory->selected] = items[FLINT];
 }
+
+// Notes function
+void useNotes(Game * game, Item items[MAX_ITEMS]) {
+    logger(LOG_DEBUG, "Using Notes!", "");
+    if (Inventory_contain(game->player->inventory, FLINT_ACTIVE))
+    	game->player->inventory->items[game->player->inventory->selected] = items[PAPER_ASH];
+    else
+    	logger(LOG_DEBUG, "You can do that: Flint is not active!", "");
+}
+
+// Paper ash function
+void usePaperAsh(Game * game, Item items[MAX_ITEMS]) {
+    logger(LOG_DEBUG, "Using Paper Ash!", "");
+}
+
+
 
 GameItems * GameItems_new() {
 	GameItems * gi = malloc(sizeof(GameItems));
@@ -41,6 +57,12 @@ void GameItems_init(GameItems * gameItems) {
 
     gameItems->items[FLINT_ACTIVE] = *Item_new(FLINT_ACTIVE, "Flint", true, LoadTexture("assets/flint_active.png"));
     gameItems->use[FLINT_ACTIVE] = useFlintActive;
+
+    gameItems->items[NOTES] = *Item_new(NOTES, "Notes", true, LoadTexture("assets/instructions.png"));
+    gameItems->use[NOTES] = useNotes;
+
+    gameItems->items[PAPER_ASH] = *Item_new(PAPER_ASH, "Paper Ash", true, LoadTexture("assets/paper_ash.png"));
+    gameItems->use[PAPER_ASH] = usePaperAsh;
 }
 
 void GameItems_control(Game * game, GameItems * gameItems) {
