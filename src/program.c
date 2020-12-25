@@ -37,17 +37,17 @@ void logger(int msgType, const char *text, va_list args)
 // Module Functions Declaration (local)
 //------------------------------------------------------------------------------------
 // Initialize game
-static void InitGame(Camera2D * camera, Game * game, GameItems * gamesItems);
+static void InitGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems);
 // Update game (one frame)
-static void UpdateGame(Camera2D * camera, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH]);
+static void UpdateGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH]);
 // Update player (one frame)
 static void UpdatePlayer(Camera2D * camera, Game * game, float delta);
 // Draw game (one frame)
-static void DrawGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]);
+static void DrawGame(Camera2D * camera, Menu * menu, Game * game, char coords[COORDS_BUFFER_LENGTH]);
 // Unload game
 static void UnloadGame(Camera2D * camera, Game * game); 
 // Update and Draw (one frame)
-static void UpdateDrawFrame(Camera2D * camera, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH]);
+static void UpdateDrawFrame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH]);
 // Update camera position
 static void UpdateCameraCenter(Camera2D * camera, Game * game);
 
@@ -58,6 +58,7 @@ int main(void)
 {
     Camera2D camera = {0};
     Game game;
+    Menu menu;
     GameItems gameItems;
     char coords[COORDS_BUFFER_LENGTH];
 
@@ -67,8 +68,9 @@ int main(void)
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     SetTraceLogCallback(logger);
     InitWindow(WINDOW_BASE_WIDTH, WINDOW_BASE_HEIGHT, "50NuancesDeCodes - by IMT GRAY TEAM");
-
-    InitGame(&camera, &game, &gameItems);
+    InitAudioDevice();
+    
+    InitGame(&camera, &menu, &game, &gameItems);
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
@@ -78,7 +80,7 @@ int main(void)
     {
         // Update and Draw
         //----------------------------------------------------------------------------------
-        UpdateDrawFrame(&camera, &game, &gameItems, coords);
+        UpdateDrawFrame(&camera, &menu, &game, &gameItems, coords);
         //----------------------------------------------------------------------------------
     }
     // De-Initialization
@@ -92,13 +94,14 @@ int main(void)
 }
 
 // Initialize game variables
-void InitGame(Camera2D * camera, Game * game, GameItems * gamesItems) {
+void InitGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems) {
     camera->target = game->player->position;
     camera->offset = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
     camera->rotation = 0.0f;
     camera->zoom = 1.0f;
 
     // INIT GAME
+    Menu_init(menu);
     Game_init(game);
     GameItems_init(gamesItems);
     
@@ -110,8 +113,8 @@ void InitGame(Camera2D * camera, Game * game, GameItems * gamesItems) {
 }
 
 // Update game (one frame)
-void UpdateGame(Camera2D * camera, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH]) {
-    if (game->state == -1) Menu_update(game);
+void UpdateGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH]) {
+    if (game->state == -1) Menu_update(menu, game);
     else {
         float deltaTime = GetFrameTime();
         GameItems_control(game, gamesItems);
@@ -128,8 +131,8 @@ void UpdatePlayer(Camera2D * camera, Game * game, float delta) {
 }
 
 // Draw game (one frame)
-void DrawGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]) {
-    if (game->state == -1) Menu_draw();
+void DrawGame(Camera2D * camera, Menu * menu, Game * game, char coords[COORDS_BUFFER_LENGTH]) {
+    if (game->state == -1) Menu_draw(menu);
     if (game->state == 0) Game_draw(camera, game, coords);
 }
 
@@ -144,10 +147,10 @@ void UnloadGame(Camera2D * camera, Game * game) {
 }
 
 // Update and Draw (one frame)
-void UpdateDrawFrame(Camera2D * camera, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH])
+void UpdateDrawFrame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH])
 {
-    UpdateGame(camera, game, gamesItems, coords);
-    DrawGame(camera, game, coords);
+    UpdateGame(camera, menu, game, gamesItems, coords);
+    DrawGame(camera, menu, game, coords);
 }
 
 void UpdateCameraCenter(Camera2D * camera, Game * game)
