@@ -105,6 +105,7 @@ void InitGame(Camera2D * camera, Game * game, GameItems * gamesItems) {
     // ADD ITEMS FOR TEST
     game->player->inventory->items[0] = gamesItems->items[PRISON_KEY];
     game->player->inventory->items[1] = gamesItems->items[MAGNET_CARD];
+    game->player->inventory->items[2] = gamesItems->items[FLINT];
 }
 
 // Update game (one frame)

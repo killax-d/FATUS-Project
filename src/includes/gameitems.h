@@ -8,8 +8,10 @@
 // Item by id (0 to MAX_ITEMS-1)
 #define PRISON_KEY 0
 #define MAGNET_CARD 1
+#define FLINT 2
+#define FLINT_ACTIVE 3
 
-typedef void (*useItem)(Game * game);
+typedef void (*useItem)(Game * game, Item items[MAX_ITEMS]);
 
 typedef struct GameItems {
 	Item items[MAX_ITEMS];
@@ -17,8 +19,10 @@ typedef struct GameItems {
 } GameItems;
 
 
-void usePrisonKey(Game * game);
-void useMagnetCard(Game * game);
+void usePrisonKey(Game * game, Item items[MAX_ITEMS]);
+void useMagnetCard(Game * game, Item items[MAX_ITEMS]);
+void useFlint(Game * game, Item items[MAX_ITEMS]);
+void useFlintActive(Game * game, Item items[MAX_ITEMS]);
 
 GameItems * GameItems_new();
 
