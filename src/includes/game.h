@@ -5,6 +5,7 @@
 #include "./player.h"
 #include "./map.h"
 
+
 typedef struct Game {
 	int state;
 	/*

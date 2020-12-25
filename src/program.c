@@ -5,12 +5,13 @@
 #include <math.h>
 
 #include "./includes/game.h"
+#include "./includes/gameitems.h"
 #define COORDS_BUFFER_LENGTH 30
 #define WINDOW_BASE_WIDTH 800
 #define WINDOW_BASE_HEIGHT 600
 
 // Custom logger
-static void logger(int msgType, const char *text, va_list args)
+void logger(int msgType, const char *text, va_list args)
 {
     char timeStr[64] = { 0 };
     time_t now = time(NULL);
@@ -36,9 +37,9 @@ static void logger(int msgType, const char *text, va_list args)
 // Module Functions Declaration (local)
 //------------------------------------------------------------------------------------
 // Initialize game
-static void InitGame(Camera2D * camera, Game * game);
+static void InitGame(Camera2D * camera, Game * game, GameItems * gamesItems);
 // Update game (one frame)
-static void UpdateGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]);
+static void UpdateGame(Camera2D * camera, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH]);
 // Update player (one frame)
 static void UpdatePlayer(Camera2D * camera, Game * game, float delta);
 // Draw game (one frame)
@@ -46,7 +47,7 @@ static void DrawGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_L
 // Unload game
 static void UnloadGame(Camera2D * camera, Game * game); 
 // Update and Draw (one frame)
-static void UpdateDrawFrame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]);
+static void UpdateDrawFrame(Camera2D * camera, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH]);
 // Update camera position
 static void UpdateCameraCenter(Camera2D * camera, Game * game);
 
@@ -57,6 +58,7 @@ int main(void)
 {
     Camera2D camera = {0};
     Game game;
+    GameItems gameItems;
     char coords[COORDS_BUFFER_LENGTH];
 
     // Initialization (Note windowTitle is unused on Android)
@@ -66,7 +68,7 @@ int main(void)
     SetTraceLogCallback(logger);
     InitWindow(WINDOW_BASE_WIDTH, WINDOW_BASE_HEIGHT, "50NuancesDeCodes - by IMT GRAY TEAM");
 
-    InitGame(&camera, &game);
+    InitGame(&camera, &game, &gameItems);
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
@@ -76,7 +78,7 @@ int main(void)
     {
         // Update and Draw
         //----------------------------------------------------------------------------------
-        UpdateDrawFrame(&camera, &game, coords);
+        UpdateDrawFrame(&camera, &game, &gameItems, coords);
         //----------------------------------------------------------------------------------
     }
     // De-Initialization
@@ -90,21 +92,25 @@ int main(void)
 }
 
 // Initialize game variables
-void InitGame(Camera2D * camera, Game * game) {
+void InitGame(Camera2D * camera, Game * game, GameItems * gamesItems) {
     camera->target = game->player->position;
     camera->offset = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
     camera->rotation = 0.0f;
     camera->zoom = 1.0f;
 
+    GameItems_init(gamesItems);
     // INIT GAME
     Game_init(game);
 
-    game->player->inventory->items[0] = (Item) {0, "Prison Key", true, LoadTexture("assets/prison_key.png")};
+    // ADD ITEMS FOR TEST
+    game->player->inventory->items[0] = gamesItems->items[PRISON_KEY];
+    game->player->inventory->items[1] = gamesItems->items[MAGNET_CARD];
 }
 
 // Update game (one frame)
-void UpdateGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]) {
+void UpdateGame(Camera2D * camera, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH]) {
     float deltaTime = GetFrameTime();
+    GameItems_control(game, gamesItems);
     UpdatePlayer(camera, game, deltaTime);
     UpdateCameraCenter(camera, game);
     sprintf(coords, "X: %.2f\nY: %.2f", camera->target.x, camera->target.y);
@@ -155,9 +161,9 @@ void UnloadGame(Camera2D * camera, Game * game) {
 }
 
 // Update and Draw (one frame)
-void UpdateDrawFrame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH])
+void UpdateDrawFrame(Camera2D * camera, Game * game, GameItems * gamesItems, char coords[COORDS_BUFFER_LENGTH])
 {
-    UpdateGame(camera, game, coords);
+    UpdateGame(camera, game, gamesItems, coords);
     DrawGame(camera, game, coords);
 }
 

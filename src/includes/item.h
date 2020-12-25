@@ -10,6 +10,8 @@ typedef struct Item {
     Texture2D texture;
 } Item;
 
+Item * Item_new(int id, char * name, bool hasTexture, Texture2D texture);
+
 void Item_draw(int x, int y, Item item);
 
 #endif
