@@ -3,13 +3,6 @@
 
 Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea) {
 	Door * door = malloc(sizeof(Door));
-	// Add door to map
-	for (int y = (int) bounds.y; y < (int) (bounds.y + bounds.height); y++) {
-		for (int x = (int) bounds.x; x < (int) (bounds.x + bounds.width); x++) {
-			map->sprite[y][x].color = RED;
-			map->sprite[y][x].blocking = true;
-		}
-	}
 
 	// REMOVE THAT FOR THE RELEASE
 	// Add useArea overlay to map
@@ -19,6 +12,13 @@ Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea) {
 		}
 	}
 
+	// Add door to map
+	for (int y = (int) bounds.y; y < (int) (bounds.y + bounds.height); y++) {
+		for (int x = (int) bounds.x; x < (int) (bounds.x + bounds.width); x++) {
+			map->sprite[y][x].color = RED;
+			map->sprite[y][x].blocking = true;
+		}
+	}
 	door->bounds = bounds;
 	door->useArea = (Rectangle) 
 		{
@@ -32,7 +32,7 @@ Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea) {
 }
 
 bool Door_open(GameMap * map, Door * door, Vector2 vector) {
-	if (CheckCollisionPointRec(vector, door->useArea)) {
+	if (!door->open && CheckCollisionPointRec(vector, door->useArea)) {
 		for (int y = (int) door->bounds.y; y < (int) (door->bounds.y + door->bounds.height); y++) {
 			for (int x = (int) door->bounds.x; x < (int) (door->bounds.x + door->bounds.width); x++) {
 				map->sprite[y][x].color = YELLOW;

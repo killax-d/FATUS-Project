@@ -127,8 +127,8 @@ void Game_init(Game * game) {
         Height (y) : 13
     */
     // Magnet door
-    Door * door = Door_new(game->map, (Rectangle) {56, 44, 1, 13}, (Rectangle) {57, 44, 1, 13});
-    game->doors[MAGNET_DOOR] = *door;
+    game->doors[MAGNET_DOOR] = *Door_new(game->map, (Rectangle) {56, 44, 1, 13}, (Rectangle) {57, 44, 1, 13});
+    game->doors[PRISON_DOOR] = *Door_new(game->map, (Rectangle) {24, 29, 1, 9}, (Rectangle) {23, 29, 3, 9});
 }
 
 void Game_draw(Camera2D * camera, Game * game) {

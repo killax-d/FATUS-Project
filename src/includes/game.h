@@ -6,7 +6,7 @@
 #include "./map.h"
 #include "./door.h"
 #define COORDS_BUFFER_LENGTH 50
-#define DOORS_COUNT 1
+#define DOORS_COUNT 2
 
 typedef struct Game {
 	int state;

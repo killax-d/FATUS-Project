@@ -4,6 +4,7 @@
 #include "map.h"
 
 #define MAGNET_DOOR 0
+#define PRISON_DOOR 1
 
 typedef struct Door {
 	Rectangle bounds;
