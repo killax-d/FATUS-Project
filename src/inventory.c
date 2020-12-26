@@ -23,3 +23,10 @@ void Inventory_draw(int x, int y, Inventory * inv) {
 		if (inv->items[i].hasTexture) Item_draw(x + ((48+4) * i), y, inv->items[i]);
 	}
 }
+
+// Contains items
+// ex: Inventory_contain(player->inventory, PRISON_KEY);
+bool Inventory_contain(Inventory * inv, int id) {
+	for (int i = 0; i < INVENTORY_SIZE; i++) if (inv->items[i].id == id) return true;
+	return false;
+}
