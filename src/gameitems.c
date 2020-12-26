@@ -35,7 +35,7 @@ void useNotes(Game * game, Item items[MAX_ITEMS]) {
     if (Inventory_contain(game->player->inventory, FLINT_ACTIVE))
     	game->player->inventory->items[game->player->inventory->selected] = items[PAPER_ASH];
     else
-    	logger(LOG_DEBUG, "You can do that: Flint is not active!", "");
+    	logger(LOG_DEBUG, "You can't do that: Flint is not active!", "");
 }
 
 // Paper ash function
