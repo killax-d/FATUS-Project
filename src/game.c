@@ -123,11 +123,12 @@ void Game_init(Game * game) {
         Row (x) : 56
         Column (y) : 44
             - and size -
-        Width (x) : 1
-        Height (y) : 13
+        Width ((x) +1) : 1
+        Height ((y) +1) : 13
     */
     // Magnet door
     game->doors[MAGNET_DOOR] = *Door_new(game->map, (Rectangle) {56, 44, 1, 13}, (Rectangle) {57, 44, 1, 13});
+    // Prison door
     game->doors[PRISON_DOOR] = *Door_new(game->map, (Rectangle) {24, 29, 1, 9}, (Rectangle) {23, 29, 3, 9});
 }
 
