@@ -40,11 +40,11 @@ void Menu_init(Menu * menu) {
 }
 
 void Menu_update(Menu * menu, Game * game) {
-	for (int i = 0; i < BUTTON_COUNT; i++)
+	for (int i = 0; i < BUTTONS_COUNT; i++)
 		Button_hover(menu->buttons[i], GetMousePosition());
 
 	if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
-		for (int i = 0; i < BUTTON_COUNT; i++)
+		for (int i = 0; i < BUTTONS_COUNT; i++)
 			Button_handle(menu->buttons[i], game);
 }
 
@@ -53,7 +53,7 @@ void Menu_draw(Menu * menu) {
 
         ClearBackground(LIGHTGRAY);
 
-		for (int i = 0; i < BUTTON_COUNT; i++) Button_draw(menu->buttons[i]);
+		for (int i = 0; i < BUTTONS_COUNT; i++) Button_draw(menu->buttons[i]);
 
     EndDrawing();
 }

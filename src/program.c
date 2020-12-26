@@ -39,17 +39,17 @@ void logger(int msgType, const char *text, va_list args)
 // Module Functions Declaration (local)
 //------------------------------------------------------------------------------------
 // Initialize game
-static void InitGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems);
+static void InitGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems);
 // Update game (one frame)
-static void UpdateGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems);
+static void UpdateGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems);
 // Update player (one frame)
 static void UpdatePlayer(Camera2D * camera, Game * game, float delta);
 // Draw game (one frame)
 static void DrawGame(Camera2D * camera, Menu * menu, Game * game);
 // Unload game
-static void UnloadGame(Camera2D * camera, Game * game); 
+static void UnloadGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems); 
 // Update and Draw (one frame)
-static void UpdateDrawFrame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems);
+static void UpdateDrawFrame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems);
 // Update camera position
 static void UpdateCameraCenter(Camera2D * camera, Game * game);
 
@@ -69,7 +69,6 @@ int main(void)
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     SetTraceLogCallback(logger);
     InitWindow(WINDOW_BASE_WIDTH, WINDOW_BASE_HEIGHT, "50NuancesDeCodes - by IMT GRAY TEAM");
-    InitAudioDevice();
     
     InitGame(&camera, &menu, &game, &gameItems);
 
@@ -86,7 +85,7 @@ int main(void)
     }
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadGame(&camera, &game);     // Unload loaded data (textures, sounds, models...)
+    UnloadGame(&camera, &menu, &game, &gameItems);     // Unload loaded data (textures, sounds, models...)
     
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
@@ -95,11 +94,13 @@ int main(void)
 }
 
 // Initialize game variables
-void InitGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems) {
+void InitGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems) {
+    InitAudioDevice();
+
     // INIT GAME
     Menu_init(menu);
     Game_init(game);
-    GameItems_init(gamesItems);
+    GameItems_init(gameItems);
 
     // INIT CAMERA
     camera->target = game->player->position;
@@ -108,18 +109,18 @@ void InitGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItem
     camera->zoom = 1.0f;
     
     // ADD ITEMS FOR TEST
-    game->player->inventory->items[0] = gamesItems->items[PRISON_KEY];
-    game->player->inventory->items[1] = gamesItems->items[MAGNET_CARD];
-    game->player->inventory->items[2] = gamesItems->items[FLINT];
-    game->player->inventory->items[3] = gamesItems->items[NOTES];
+    game->player->inventory->items[0] = gameItems->items[PRISON_KEY];
+    game->player->inventory->items[1] = gameItems->items[MAGNET_CARD];
+    game->player->inventory->items[2] = gameItems->items[FLINT];
+    game->player->inventory->items[3] = gameItems->items[NOTES];
 }
 
 // Update game (one frame)
-void UpdateGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems) {
+void UpdateGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems) {
     if (game->state == -1) Menu_update(menu, game);
     else {
         float deltaTime = GetFrameTime();
-        GameItems_control(game, gamesItems);
+        GameItems_control(game, gameItems);
         UpdatePlayer(camera, game, deltaTime);
         UpdateCameraCenter(camera, game);
     }
@@ -143,19 +144,32 @@ void DrawGame(Camera2D * camera, Menu * menu, Game * game) {
 }
 
 // Unload game
-void UnloadGame(Camera2D * camera, Game * game) {
+void UnloadGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems) {
+    UnloadTexture(game->player->texture);
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        UnloadTexture(gameItems->items[i].texture);
+        free(&gameItems->items[i]);
+    }
+    for (int i = 0; i < BUTTONS_COUNT; i++) {
+        UnloadSound(menu->buttons[i]->sound);
+        free(&menu->buttons[i]);
+    }
+    for (int y = 0; y < MAP_HEIGHT; y++)
+        for(int x = 0; x < MAP_WIDTH; x++)
+            free(&game->map->sprite[y][x]);
     free(&camera);
     free(&game->player->inventory);
     free(&game->player->collider);
     free(&game->player);
     free(&game->map);
     free(&game);
+    CloseAudioDevice();
 }
 
 // Update and Draw (one frame)
-void UpdateDrawFrame(Camera2D * camera, Menu * menu, Game * game, GameItems * gamesItems)
+void UpdateDrawFrame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems)
 {
-    UpdateGame(camera, menu, game, gamesItems);
+    UpdateGame(camera, menu, game, gameItems);
     DrawGame(camera, menu, game);
 }
 

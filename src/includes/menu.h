@@ -4,10 +4,10 @@
 #include "./game.h"
 #include "./button.h"
 
-#define BUTTON_COUNT 2
+#define BUTTONS_COUNT 2
 
 typedef struct Menu {
-	Button * buttons[BUTTON_COUNT];
+	Button * buttons[BUTTONS_COUNT];
 } Menu;
 
 void playHandle(Game * game);
