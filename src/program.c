@@ -5,12 +5,15 @@
 #include <math.h>
 
 #include "./includes/game.h"
-#define COORDS_BUFFER_LENGTH 30
+#include "./includes/gameitems.h"
+#include "./includes/menu.h"
 #define WINDOW_BASE_WIDTH 800
 #define WINDOW_BASE_HEIGHT 600
 
+#define DEBUG 0
+
 // Custom logger
-static void logger(int msgType, const char *text, va_list args)
+void logger(int msgType, const char *text, va_list args)
 {
     char timeStr[64] = { 0 };
     time_t now = time(NULL);
@@ -36,17 +39,17 @@ static void logger(int msgType, const char *text, va_list args)
 // Module Functions Declaration (local)
 //------------------------------------------------------------------------------------
 // Initialize game
-static void InitGame(Camera2D * camera, Game * game);
+static void InitGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems);
 // Update game (one frame)
-static void UpdateGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]);
+static void UpdateGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems);
 // Update player (one frame)
 static void UpdatePlayer(Camera2D * camera, Game * game, float delta);
 // Draw game (one frame)
-static void DrawGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]);
+static void DrawGame(Camera2D * camera, Menu * menu, Game * game);
 // Unload game
-static void UnloadGame(Camera2D * camera, Game * game); 
+static void UnloadGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems); 
 // Update and Draw (one frame)
-static void UpdateDrawFrame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]);
+static void UpdateDrawFrame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems);
 // Update camera position
 static void UpdateCameraCenter(Camera2D * camera, Game * game);
 
@@ -57,7 +60,8 @@ int main(void)
 {
     Camera2D camera = {0};
     Game game;
-    char coords[COORDS_BUFFER_LENGTH];
+    Menu menu;
+    GameItems gameItems;
 
     // Initialization (Note windowTitle is unused on Android)
     //---------------------------------------------------------
@@ -65,8 +69,8 @@ int main(void)
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     SetTraceLogCallback(logger);
     InitWindow(WINDOW_BASE_WIDTH, WINDOW_BASE_HEIGHT, "50NuancesDeCodes - by IMT GRAY TEAM");
-
-    InitGame(&camera, &game);
+    
+    InitGame(&camera, &menu, &game, &gameItems);
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
@@ -76,12 +80,12 @@ int main(void)
     {
         // Update and Draw
         //----------------------------------------------------------------------------------
-        UpdateDrawFrame(&camera, &game, coords);
+        UpdateDrawFrame(&camera, &menu, &game, &gameItems);
         //----------------------------------------------------------------------------------
     }
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadGame(&camera, &game);     // Unload loaded data (textures, sounds, models...)
+    UnloadGame(&camera, &menu, &game, &gameItems);     // Unload loaded data (textures, sounds, models...)
     
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
@@ -90,75 +94,83 @@ int main(void)
 }
 
 // Initialize game variables
-void InitGame(Camera2D * camera, Game * game) {
+void InitGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems) {
+    InitAudioDevice();
+
+    // INIT GAME
+    Menu_init(menu);
+    Game_init(game);
+    GameItems_init(gameItems);
+
+    // INIT CAMERA
     camera->target = game->player->position;
     camera->offset = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
     camera->rotation = 0.0f;
     camera->zoom = 1.0f;
-
-    // INIT GAME
-    Game_init(game);
-
-    game->player->inventory->items[0] = (Item) {0, "Prison Key", true, LoadTexture("assets/prison_key.png")};
+    
+    // ADD ITEMS FOR TEST
+    game->player->inventory->items[0] = gameItems->items[PRISON_KEY];
+    game->player->inventory->items[1] = gameItems->items[MAGNET_CARD];
+    game->player->inventory->items[2] = gameItems->items[FLINT];
+    game->player->inventory->items[3] = gameItems->items[NOTES];
 }
 
 // Update game (one frame)
-void UpdateGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]) {
-    float deltaTime = GetFrameTime();
-    UpdatePlayer(camera, game, deltaTime);
-    UpdateCameraCenter(camera, game);
-    sprintf(coords, "X: %.2f\nY: %.2f", camera->target.x, camera->target.y);
+void UpdateGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems) {
+    if (game->state == -1) Menu_update(menu, game);
+    else {
+        float deltaTime = GetFrameTime();
+        GameItems_control(game, gameItems);
+        UpdatePlayer(camera, game, deltaTime);
+        UpdateCameraCenter(camera, game);
+    }
 }
 
 // Update player (one frame)
 void UpdatePlayer(Camera2D * camera, Game * game, float delta) {
     Player_control(camera, game->player);
     Player_move(game->map, game->player, delta);
+    sprintf(game->coordsText, "X: %d / %.2f\nY: %d / %.2f", 
+            (int) game->player->position.x/MAP_TEXTURE_SCALE, 
+            game->player->position.x, 
+            (int) game->player->position.y/MAP_TEXTURE_SCALE, 
+            game->player->position.y);
 }
 
 // Draw game (one frame)
-void DrawGame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]) {
-    BeginDrawing();
-
-        ClearBackground(BLACK);
-
-        BeginMode2D(*camera);
-            // DRAW MAP
-            Map_draw(game->map);
-
-            // DRAW PLAYER
-            Player_draw(game->player);
-        EndMode2D();
-
-        // DRAW INVENTORY
-        Inventory_draw(20, GetScreenHeight() - 20 - 48, game->player->inventory);
-
-        DrawFPS(GetScreenWidth()-80, 10);
-        DrawText("Touches :", 20, 20, 10, WHITE);
-        DrawText("- ZQSD ou Flèches pour se diriger", 40, 40, 10, WHITE);
-        DrawText("- Shift pour sprinter", 40, 60, 10, WHITE);
-        DrawText("- Molette pour changer d'item", 40, 80, 10, WHITE);
-        DrawText("- Ctrl + Molette pour zoomer", 40, 100, 10, WHITE);
-        DrawText(coords, GetScreenWidth()-60, 40, 10, DARKGRAY);
-
-    EndDrawing();
+void DrawGame(Camera2D * camera, Menu * menu, Game * game) {
+    if (game->state == -1) Menu_draw(menu);
+    if (game->state == 0) Game_draw(camera, game);
 }
 
 // Unload game
-void UnloadGame(Camera2D * camera, Game * game) {
+void UnloadGame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems) {
+    UnloadTexture(game->player->texture);
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        UnloadTexture(gameItems->items[i].texture);
+        free(&gameItems->items[i]);
+    }
+    for (int i = 0; i < BUTTONS_COUNT; i++) {
+        UnloadSound(menu->buttons[i]->sound);
+        free(&menu->buttons[i]);
+    }
+    for (int y = 0; y < MAP_HEIGHT; y++)
+        for(int x = 0; x < MAP_WIDTH; x++)
+            free(&game->map->sprite[y][x]);
     free(&camera);
     free(&game->player->inventory);
     free(&game->player->collider);
     free(&game->player);
     free(&game->map);
     free(&game);
+    CloseAudioDevice();
 }
 
 // Update and Draw (one frame)
-void UpdateDrawFrame(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH])
+void UpdateDrawFrame(Camera2D * camera, Menu * menu, Game * game, GameItems * gameItems)
 {
-    UpdateGame(camera, game, coords);
-    DrawGame(camera, game, coords);
+    UpdateGame(camera, menu, game, gameItems);
+    DrawGame(camera, menu, game);
 }
 
 void UpdateCameraCenter(Camera2D * camera, Game * game)

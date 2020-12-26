@@ -18,4 +18,6 @@ Inventory * Inventory_new();
 
 void Inventory_draw(int x, int y, Inventory * inv);
 
+bool Inventory_contain(Inventory * inv, int id);
+
 #endif

@@ -50,7 +50,7 @@ void Player_draw(Player * player) {
 void Player_control(Camera2D * camera, Player * player) {
 	// Key switch (inventory)
     int keys[] = {KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_FIVE, KEY_SIX, KEY_SEVEN, KEY_EIGHT, KEY_NINE};
-    for (int i = 0; i < 9; i++) if (IsKeyDown(keys[i])) player->inventory->selected = keys[i] - KEY_ONE;
+    for (int i = 0; i < 9; i++) if (IsKeyPressed(keys[i])) player->inventory->selected = keys[i] - KEY_ONE;
 
     if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) {
         // Zoom control
@@ -59,12 +59,13 @@ void Player_control(Camera2D * camera, Player * player) {
         else if (camera->zoom < 0.25f) camera->zoom = 0.25f;
     } else { 
         // Mouse Wheel switch (inventory)
-        Player_switchItem(player, player->inventory->selected - GetMouseWheelMove());
+        player->inventory->selected -= GetMouseWheelMove();
         if (player->inventory->selected < 0) Player_switchItem(player, 0);
         if (player->inventory->selected > 8) Player_switchItem(player, 8);
     }
 
     // Update selected item (inventory draw the name of item)
+    Player_switchItem(player, player->inventory->selected);
 
     // Is player sprinting ?
 	player->sprinting = IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT);
