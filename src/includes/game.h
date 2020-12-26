@@ -4,7 +4,9 @@
 #include "stdlib.h"
 #include "./player.h"
 #include "./map.h"
-#define COORDS_BUFFER_LENGTH 30
+#include "./door.h"
+#define COORDS_BUFFER_LENGTH 50
+#define DOORS_COUNT 1
 
 typedef struct Game {
 	int state;
@@ -17,10 +19,12 @@ typedef struct Game {
     bool paused;
     GameMap * map;
     Player * player;
+    Door doors[DOORS_COUNT];
+    char coordsText[COORDS_BUFFER_LENGTH];
 } Game;
 
 void Game_init(Game * game);
 
-void Game_draw(Camera2D * camera, Game * game, char coords[COORDS_BUFFER_LENGTH]);
+void Game_draw(Camera2D * camera, Game * game);
 
 #endif
