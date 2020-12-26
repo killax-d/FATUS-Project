@@ -15,4 +15,6 @@ Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea);
 
 bool Door_open(GameMap * map, Door * door, Vector2 vector);
 
+void Door_close(GameMap * map, Door * door);
+
 #endif

@@ -44,3 +44,13 @@ bool Door_open(GameMap * map, Door * door, Vector2 vector) {
 	}
 	return false;
 }
+
+void Door_close(GameMap * map, Door * door) {
+	for (int y = (int) door->bounds.y; y < (int) (door->bounds.y + door->bounds.height); y++) {
+		for (int x = (int) door->bounds.x; x < (int) (door->bounds.x + door->bounds.width); x++) {
+			map->sprite[y][x].color = RED;
+			map->sprite[y][x].blocking = true;
+		}
+	}
+	door->open = false;
+}
