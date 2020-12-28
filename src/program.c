@@ -63,7 +63,7 @@ int main(void)
     Game game;
     Menu menu;
     GameItems gameItems;
-    Minimap minimap = { 20, 20, 200, 200 };
+    Minimap minimap = { 20, 20, 150, 150 };
 
     // Initialization (Note windowTitle is unused on Android)
     //---------------------------------------------------------

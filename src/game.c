@@ -148,12 +148,12 @@ void Game_draw(Camera2D * camera, Game * game) {
     Inventory_draw(20, GetScreenHeight() - 20 - 48, game->player->inventory);
 
     DrawFPS(GetScreenWidth()-80, 10);
-    DrawText("Touches :", 20, 240, 10, WHITE);
-    DrawText("- ZQSD ou Flèches pour se diriger", 40, 260, 10, WHITE);
-    DrawText("- Shift pour sprinter", 40, 280, 10, WHITE);
-    DrawText("- Molette pour changer d'item", 40, 300, 10, WHITE);
-    DrawText("- Ctrl + Molette pour zoomer", 40, 320, 10, WHITE);
-    DrawText("- E pour utiliser", 40, 340, 10, WHITE);
+    DrawText("Touches :", 180, 20, 10, WHITE);
+    DrawText("- ZQSD ou Flèches pour se diriger", 190, 40, 10, WHITE);
+    DrawText("- Shift pour sprinter", 190, 60, 10, WHITE);
+    DrawText("- Molette pour changer d'item", 190, 80, 10, WHITE);
+    DrawText("- Ctrl + Molette pour zoomer (minimap)", 190, 100, 10, WHITE);
+    DrawText("- E pour utiliser", 190, 120, 10, WHITE);
     DrawText(game->coordsText, GetScreenWidth()-80, 40, 10, DARKGRAY);
 
 }

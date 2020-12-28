@@ -1,9 +1,9 @@
 #include "includes/minimap.h"
 
 void Minimap_init(Minimap * minimap) {
-	minimap->zooms_availables[0] = 40;
-	minimap->zooms_availables[1] = 50;
-	minimap->zooms_availables[2] = 100;
+	minimap->zooms_availables[0] = 50;
+	minimap->zooms_availables[1] = 75;
+	minimap->zooms_availables[2] = 150;
 
 	minimap->zoom = 0;
 	minimap->scale = minimap->width / minimap->zooms_availables[minimap->zoom];
