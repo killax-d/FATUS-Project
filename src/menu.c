@@ -49,11 +49,7 @@ void Menu_update(Menu * menu, Game * game) {
 }
 
 void Menu_draw(Menu * menu) {
-    BeginDrawing();
+    ClearBackground(LIGHTGRAY);
 
-        ClearBackground(LIGHTGRAY);
-
-		for (int i = 0; i < BUTTONS_COUNT; i++) Button_draw(menu->buttons[i]);
-
-    EndDrawing();
+	for (int i = 0; i < BUTTONS_COUNT; i++) Button_draw(menu->buttons[i]);
 }

@@ -133,29 +133,27 @@ void Game_init(Game * game) {
 }
 
 void Game_draw(Camera2D * camera, Game * game) {
-    BeginDrawing();
 
-        ClearBackground(BLACK);
+    ClearBackground(BLACK);
 
-        BeginMode2D(*camera);
-            // DRAW MAP
-            Map_draw(game->map);
+    BeginMode2D(*camera);
+        // DRAW MAP
+        Map_draw(game->map);
 
-            // DRAW PLAYER
-            Player_draw(game->player);
-        EndMode2D();
+        // DRAW PLAYER
+        Player_draw(game->player);
+    EndMode2D();
 
-        // DRAW INVENTORY
-        Inventory_draw(20, GetScreenHeight() - 20 - 48, game->player->inventory);
+    // DRAW INVENTORY
+    Inventory_draw(20, GetScreenHeight() - 20 - 48, game->player->inventory);
 
-        DrawFPS(GetScreenWidth()-80, 10);
-        DrawText("Touches :", 20, 20, 10, WHITE);
-        DrawText("- ZQSD ou Flèches pour se diriger", 40, 40, 10, WHITE);
-        DrawText("- Shift pour sprinter", 40, 60, 10, WHITE);
-        DrawText("- Molette pour changer d'item", 40, 80, 10, WHITE);
-        DrawText("- Ctrl + Molette pour zoomer", 40, 100, 10, WHITE);
-        DrawText("- E pour utiliser", 40, 120, 10, WHITE);
-        DrawText(game->coordsText, GetScreenWidth()-80, 40, 10, DARKGRAY);
+    DrawFPS(GetScreenWidth()-80, 10);
+    DrawText("Touches :", 20, 240, 10, WHITE);
+    DrawText("- ZQSD ou Flèches pour se diriger", 40, 260, 10, WHITE);
+    DrawText("- Shift pour sprinter", 40, 280, 10, WHITE);
+    DrawText("- Molette pour changer d'item", 40, 300, 10, WHITE);
+    DrawText("- Ctrl + Molette pour zoomer", 40, 320, 10, WHITE);
+    DrawText("- E pour utiliser", 40, 340, 10, WHITE);
+    DrawText(game->coordsText, GetScreenWidth()-80, 40, 10, DARKGRAY);
 
-    EndDrawing();
 }

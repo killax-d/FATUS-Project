@@ -52,12 +52,7 @@ void Player_control(Camera2D * camera, Player * player) {
     int keys[] = {KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_FIVE, KEY_SIX, KEY_SEVEN, KEY_EIGHT, KEY_NINE};
     for (int i = 0; i < 9; i++) if (IsKeyPressed(keys[i])) player->inventory->selected = keys[i] - KEY_ONE;
 
-    if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) {
-        // Zoom control
-        camera->zoom += ((float)GetMouseWheelMove()*0.05f);
-        if (camera->zoom > 3.0f) camera->zoom = 3.0f;
-        else if (camera->zoom < 0.25f) camera->zoom = 0.25f;
-    } else { 
+    if (!IsKeyDown(KEY_LEFT_CONTROL) && !IsKeyDown(KEY_RIGHT_CONTROL)) {
         // Mouse Wheel switch (inventory)
         player->inventory->selected -= GetMouseWheelMove();
         if (player->inventory->selected < 0) Player_switchItem(player, 0);
