@@ -3,14 +3,13 @@
 #include "raylib.h"
 #include "game.h"
 
-#define ZOOM_COUNT 3
+#define ZOOM_COUNT 4
 
 typedef struct Minimap {
 	int x;
 	int y;
-	int width;
-	int height;
-	float scale;
+	int size;
+	int scale;
 	int zoom;
 	int zooms_availables[ZOOM_COUNT];
 } Minimap;

@@ -63,7 +63,7 @@ int main(void)
     Game game;
     Menu menu;
     GameItems gameItems;
-    Minimap minimap = { 20, 20, 150, 150 };
+    Minimap minimap;
 
     // Initialization (Note windowTitle is unused on Android)
     //---------------------------------------------------------
@@ -103,6 +103,11 @@ void InitGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, Ga
     Menu_init(menu);
     Game_init(game);
     GameItems_init(gameItems);
+
+    // INIT CAMERA
+    minimap->x = 20;
+    minimap->y = 20;
+    minimap->size = 150;
     Minimap_init(minimap);
 
     // INIT CAMERA
