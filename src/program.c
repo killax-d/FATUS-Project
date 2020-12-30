@@ -45,7 +45,7 @@ static void InitGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * g
 // Update game (one frame)
 static void UpdateGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities);
 // Update player (one frame)
-static void UpdatePlayer(Camera2D * camera, Game * game, float delta);
+static void UpdatePlayer(Game * game, float delta);
 // Draw game (one frame)
 static void DrawGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameEntities * gameEntities);
 // Unload game
@@ -133,14 +133,14 @@ void UpdateGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, 
         GameItems_control(game, gameItems);
         GameEntities_control(game, gameEntities);
         GameEntities_update(game, gameEntities);
-        UpdatePlayer(camera, game, deltaTime);
+        UpdatePlayer(game, deltaTime);
         UpdateCameraCenter(camera, game);
     }
 }
 
 // Update player (one frame)
-void UpdatePlayer(Camera2D * camera, Game * game, float delta) {
-    Player_control(camera, game->player);
+void UpdatePlayer(Game * game, float delta) {
+    Player_control(game->player);
     Player_move(game->map, game->player, delta);
     sprintf(game->coordsText, "X: %d / %.2f\nY: %d / %.2f", 
             (int) game->player->position.x/MAP_TEXTURE_SCALE, 

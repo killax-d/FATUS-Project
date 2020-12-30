@@ -1,4 +1,5 @@
 #include "includes/menu.h"
+#include "includes/env.h"
 
 void playHandle(Game * game) {
 	game->state = 0;

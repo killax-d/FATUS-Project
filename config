@@ -1,6 +1,6 @@
 # Configuration for make
 CC=gcc
-CFLAGS=-std=c99 -Wall -Wextra -lraylib -g
+CFLAGS=-std=c99 -Wall -Wextra -Wno-unused-parameter -lraylib -g
 LIBS= -lraylib
 OS=Undef
 OUTPUT=dist

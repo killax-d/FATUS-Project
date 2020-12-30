@@ -30,7 +30,7 @@ void Player_init(Player * player);
 
 void Player_draw(Player * player);
 
-void Player_control(Camera2D * camera, Player * player);
+void Player_control(Player * player);
 
 void Player_switchItem(Player * player, int selected);
 

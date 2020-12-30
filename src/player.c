@@ -47,7 +47,7 @@ void Player_draw(Player * player) {
 		WHITE);
 }
 
-void Player_control(Camera2D * camera, Player * player) {
+void Player_control(Player * player) {
 	// Key switch (inventory)
     int keys[] = {KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_FIVE, KEY_SIX, KEY_SEVEN, KEY_EIGHT, KEY_NINE};
     for (int i = 0; i < 9; i++) if (IsKeyPressed(keys[i])) player->inventory->selected = keys[i] - KEY_ONE;
