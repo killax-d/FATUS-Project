@@ -25,6 +25,6 @@ typedef struct Game {
 
 void Game_init(Game * game);
 
-void Game_draw(Camera2D * camera, Game * game);
+void Game_draw(Game * game);
 
 #endif

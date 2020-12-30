@@ -14,7 +14,7 @@ void usePrisonKey(Game * game, Item items[MAX_ITEMS]) {
 void useMagnetCard(Game * game, Item items[MAX_ITEMS]) {
     logger(LOG_DEBUG, "Using magnet card!", "");
     if (Door_open(game->map, &game->doors[MAGNET_DOOR], game->player->position))
-        game->player->inventory->items[game->player->inventory->selected] = (Item) {0};
+        Inventory_removeItem(game->player->inventory, MAGNET_CARD);
 }
 
 // Flint inactive function

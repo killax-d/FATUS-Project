@@ -132,28 +132,7 @@ void Game_init(Game * game) {
     game->doors[PRISON_DOOR] = *Door_new(game->map, (Rectangle) {24, 29, 1, 9}, (Rectangle) {23, 29, 3, 9});
 }
 
-void Game_draw(Camera2D * camera, Game * game) {
-
-    ClearBackground(BLACK);
-
-    BeginMode2D(*camera);
-        // DRAW MAP
-        Map_draw(game->map);
-
-        // DRAW PLAYER
-        Player_draw(game->player);
-    EndMode2D();
-
-    // DRAW INVENTORY
-    Inventory_draw(20, GetScreenHeight() - 20 - 48, game->player->inventory);
-
-    DrawFPS(GetScreenWidth()-80, 10);
-    DrawText("Touches :", 180, 20, 10, WHITE);
-    DrawText("- ZQSD ou Flèches pour se diriger", 190, 40, 10, WHITE);
-    DrawText("- Shift pour sprinter", 190, 60, 10, WHITE);
-    DrawText("- Molette pour changer d'item", 190, 80, 10, WHITE);
-    DrawText("- Ctrl + Molette pour zoomer (minimap)", 190, 100, 10, WHITE);
-    DrawText("- E pour utiliser", 190, 120, 10, WHITE);
-    DrawText(game->coordsText, GetScreenWidth()-80, 40, 10, DARKGRAY);
-
+void Game_draw(Game * game) {
+    // DRAW MAP
+    Map_draw(game->map);
 }

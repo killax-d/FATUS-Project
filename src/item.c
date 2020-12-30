@@ -11,5 +11,5 @@ Item * Item_new(int id, char * name, bool hasTexture, Texture2D texture) {
 
 void Item_draw(int x, int y, Item item) {
     if (item.hasTexture) DrawTexture(item.texture, x+4, y+4, WHITE);
-    else DrawRectangle(x+4, y+4, 40, 40, PINK);
+    else DrawRectangle(x+4, y+4, ITEM_TEXTURE_SCALE, ITEM_TEXTURE_SCALE, PINK);
 }

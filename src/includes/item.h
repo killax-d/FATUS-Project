@@ -2,6 +2,7 @@
 #define ITEM_H
 #include "raylib.h"
 #include "stdlib.h"
+#define ITEM_TEXTURE_SCALE 40
 
 typedef struct Item {
     int id;
