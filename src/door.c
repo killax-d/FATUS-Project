@@ -2,7 +2,7 @@
 #include "includes/env.h"
 #include <stdlib.h>
 
-Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea) {
+Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea, Sound sound) {
 	Door * door = malloc(sizeof(Door));
 	
 	// Add useArea overlay to map (only DEBUG mode)
@@ -28,6 +28,7 @@ Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea) {
 			useArea.width * MAP_TEXTURE_SCALE,
 			useArea.height * MAP_TEXTURE_SCALE
 		};
+	door->sound = sound;
 	door->open = false;
 	return door;
 }
@@ -41,6 +42,7 @@ bool Door_open(GameMap * map, Door * door, Vector2 vector) {
 			}
 		}
 		door->open = true;
+		PlaySound(door->sound);
 		return true;
 	}
 	return false;

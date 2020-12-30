@@ -52,24 +52,27 @@ GameItems * GameItems_new() {
 }
 
 void GameItems_init(GameItems * gameItems) {
+    Sound item_pickup_sound = LoadSound("assets/item_pickup.mp3");
+    Sound key_pickup_sound = LoadSound("assets/key_pickup.mp3");
+
 	// SIGNATURE :
     // Item_new(int id, char * name, bool hasTexture, Texture2D texture)
-    gameItems->items[PRISON_KEY] = *Item_new(PRISON_KEY, "Prison Key", true, LoadTexture("assets/prison_key.png"));
+    gameItems->items[PRISON_KEY] = *Item_new(PRISON_KEY, "Prison Key", true, LoadTexture("assets/prison_key.png"), key_pickup_sound);
     gameItems->use[PRISON_KEY] = usePrisonKey;
 
-    gameItems->items[MAGNET_CARD] = *Item_new(MAGNET_CARD, "Magnet Card", true, LoadTexture("assets/magnet_card.png"));
+    gameItems->items[MAGNET_CARD] = *Item_new(MAGNET_CARD, "Magnet Card", true, LoadTexture("assets/magnet_card.png"), item_pickup_sound);
     gameItems->use[MAGNET_CARD] = useMagnetCard;
 
-    gameItems->items[FLINT] = *Item_new(FLINT, "Flint", true, LoadTexture("assets/flint.png"));
+    gameItems->items[FLINT] = *Item_new(FLINT, "Flint", true, LoadTexture("assets/flint.png"), item_pickup_sound);
     gameItems->use[FLINT] = useFlint;
 
-    gameItems->items[FLINT_ACTIVE] = *Item_new(FLINT_ACTIVE, "Flint", true, LoadTexture("assets/flint_active.png"));
+    gameItems->items[FLINT_ACTIVE] = *Item_new(FLINT_ACTIVE, "Flint", true, LoadTexture("assets/flint_active.png"), item_pickup_sound);
     gameItems->use[FLINT_ACTIVE] = useFlintActive;
 
-    gameItems->items[NOTES] = *Item_new(NOTES, "Notes", true, LoadTexture("assets/instructions.png"));
+    gameItems->items[NOTES] = *Item_new(NOTES, "Notes", true, LoadTexture("assets/instructions.png"), item_pickup_sound);
     gameItems->use[NOTES] = useNotes;
 
-    gameItems->items[PAPER_ASH] = *Item_new(PAPER_ASH, "Paper Ash", true, LoadTexture("assets/paper_ash.png"));
+    gameItems->items[PAPER_ASH] = *Item_new(PAPER_ASH, "Paper Ash", true, LoadTexture("assets/paper_ash.png"), item_pickup_sound);
     gameItems->use[PAPER_ASH] = usePaperAsh;
 }
 

@@ -20,8 +20,10 @@ void GameItemsEntities_update(Game * game, GameItemsEntities * gameItemsEntity) 
 void GameItemsEntities_control(Game * game, GameItemsEntities * gameItemsEntity) {
 	if (!gameItemsEntity->visible) return;
 	if (gameItemsEntity->canPickup)
-		if(Inventory_addItem(game->player->inventory, *gameItemsEntity->item))
+		if(Inventory_addItem(game->player->inventory, *gameItemsEntity->item)) {
 			gameItemsEntity->visible = false;
+			PlaySound(gameItemsEntity->item->pickupSound);
+		}
 }
 
 void GameItemsEntities_draw(GameItemsEntities * gameItemsEntity) {

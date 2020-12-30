@@ -188,11 +188,16 @@ void UnloadGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, 
     UnloadTexture(game->player->texture);
     for (int i = 0; i < MAX_ITEMS; i++) {
         UnloadTexture(gameItems->items[i].texture);
+        UnloadSound(gameItems->items[i].pickupSound);
         free(&gameItems->items[i]);
     }
     for (int i = 0; i < BUTTONS_COUNT; i++) {
         UnloadSound(menu->buttons[i]->sound);
         free(&menu->buttons[i]);
+    }
+    for (int i = 0; i < DOORS_COUNT; i++) {
+        UnloadSound(game->doors[i].sound);
+        free(&game->doors[i]);
     }
     for (int y = 0; y < MAP_HEIGHT; y++)
         for(int x = 0; x < MAP_WIDTH; x++)

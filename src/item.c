@@ -1,11 +1,12 @@
 #include "includes/item.h"
 
-Item * Item_new(int id, char * name, bool hasTexture, Texture2D texture) {
+Item * Item_new(int id, char * name, bool hasTexture, Texture2D texture, Sound pickupSound) {
 	Item * item = malloc(sizeof(Item));
 	item->id = id;
 	item->name = name;
 	item->hasTexture = hasTexture;
 	item->texture = texture;
+	item->pickupSound = pickupSound;
 	return item;
 }
 
