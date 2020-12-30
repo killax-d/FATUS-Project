@@ -3,7 +3,7 @@
 #include "raylib.h"
 #include "game.h"
 
-#define ZOOM_COUNT 4
+#define ZOOM_COUNT 3
 
 typedef struct Minimap {
 	int x;
