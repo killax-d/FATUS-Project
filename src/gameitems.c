@@ -1,4 +1,5 @@
 #include "includes/gameitems.h"
+#include "includes/env.h"
 
 // Prison key function
 void usePrisonKey(Game * game, Item items[MAX_ITEMS]) {

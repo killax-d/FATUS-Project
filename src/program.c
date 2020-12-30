@@ -4,15 +4,15 @@
 #include <time.h>
 #include <math.h>
 
-#include "./includes/game.h"
-#include "./includes/gameitems.h"
-#include "./includes/gameentities.h"
-#include "./includes/minimap.h"
-#include "./includes/menu.h"
+#include "includes/env.h"
+
+#include "includes/game.h"
+#include "includes/gameitems.h"
+#include "includes/gameentities.h"
+#include "includes/minimap.h"
+#include "includes/menu.h"
 #define WINDOW_BASE_WIDTH 800
 #define WINDOW_BASE_HEIGHT 600
-
-#define DEBUG 0
 
 // Custom logger
 void logger(int msgType, const char *text, va_list args)
@@ -175,7 +175,10 @@ void DrawGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, Ga
         DrawText("- Ctrl + Molette pour zoomer (minimap)", 190, 100, 10, WHITE);
         DrawText("- E pour utiliser", 190, 120, 10, WHITE);
         DrawText("- F pour ramasser", 190, 140, 10, WHITE);
-        DrawText(game->coordsText, GetScreenWidth()-80, 40, 10, DARKGRAY);
+        if (DEBUG) {
+            DrawText("DEBUG MODE", GetScreenWidth()-80, 70, 10, GREEN);
+            DrawText(game->coordsText, GetScreenWidth()-80, 40, 10, DARKGRAY);
+        }
     }
     EndDrawing();
 }

@@ -1,16 +1,17 @@
 #include "includes/door.h"
+#include "includes/env.h"
 #include <stdlib.h>
 
 Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea) {
 	Door * door = malloc(sizeof(Door));
-
-	// REMOVE THAT FOR THE RELEASE
-	// Add useArea overlay to map
-	for (int y = (int) useArea.y; y < (int) (useArea.y + useArea.height); y++) {
-		for (int x = (int) useArea.x; x < (int) (useArea.x + useArea.width); x++) {
-			map->sprite[y][x].color = GREEN;
+	
+	// Add useArea overlay to map (only DEBUG mode)
+	if (DEBUG)
+		for (int y = (int) useArea.y; y < (int) (useArea.y + useArea.height); y++) {
+			for (int x = (int) useArea.x; x < (int) (useArea.x + useArea.width); x++) {
+				map->sprite[y][x].color = GREEN;
+			}
 		}
-	}
 
 	// Add door to map
 	for (int y = (int) bounds.y; y < (int) (bounds.y + bounds.height); y++) {

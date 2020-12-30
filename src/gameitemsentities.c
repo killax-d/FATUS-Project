@@ -1,4 +1,5 @@
 #include "includes/gameitemsentities.h"
+#include "includes/env.h"
 
 GameItemsEntities * GameItemsEntities_new(int id, Vector2 position, Item * item, float radiusPickup, bool visible) {
 	GameItemsEntities * itemEntity = malloc(sizeof(GameItemsEntities));
@@ -27,7 +28,8 @@ void GameItemsEntities_control(Game * game, GameItemsEntities * gameItemsEntity)
 void GameItemsEntities_draw(GameItemsEntities * gameItemsEntity) {
 	if (!gameItemsEntity->visible) return;
 	// Debug radius
-	DrawCircle(gameItemsEntity->position.x, gameItemsEntity->position.y, gameItemsEntity->radiusPickup, PINK);// (Color) { 255, 109, 194, 75 });  
+	if (DEBUG)
+		DrawCircle(gameItemsEntity->position.x, gameItemsEntity->position.y, gameItemsEntity->radiusPickup, PINK);// (Color) { 255, 109, 194, 75 });  
 
 	if(gameItemsEntity->canPickup) {
 		// Can pickup background
