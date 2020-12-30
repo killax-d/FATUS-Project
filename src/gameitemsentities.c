@@ -19,10 +19,9 @@ void GameItemsEntities_update(Game * game, GameItemsEntities * gameItemsEntity) 
 
 void GameItemsEntities_control(Game * game, GameItemsEntities * gameItemsEntity) {
 	if (!gameItemsEntity->visible) return;
-	if (gameItemsEntity->canPickup) {
-		Inventory_addItem(game->player->inventory, *gameItemsEntity->item);
-		gameItemsEntity->visible = false;
-	}
+	if (gameItemsEntity->canPickup)
+		if(Inventory_addItem(game->player->inventory, *gameItemsEntity->item))
+			gameItemsEntity->visible = false;
 }
 
 void GameItemsEntities_draw(GameItemsEntities * gameItemsEntity) {

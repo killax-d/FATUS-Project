@@ -31,8 +31,10 @@ bool Inventory_contain(Inventory * inv, int id) {
 	return false;
 }
 
-void Inventory_addItem(Inventory * inv, Item item) {
+bool Inventory_addItem(Inventory * inv, Item item) {
+	if (inv->nbItems == INVENTORY_SIZE) return false;
 	inv->items[inv->nbItems++] = item;
+	return true;
 }
 
 void Inventory_removeItem(Inventory * inv, int id) {

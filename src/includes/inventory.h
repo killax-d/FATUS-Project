@@ -20,7 +20,7 @@ void Inventory_draw(int x, int y, Inventory * inv);
 
 bool Inventory_contain(Inventory * inv, int id);
 
-void Inventory_addItem(Inventory * inv, Item item);
+bool Inventory_addItem(Inventory * inv, Item item);
 
 void Inventory_removeItem(Inventory * inv, int id);
 
