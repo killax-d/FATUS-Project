@@ -115,6 +115,7 @@ void Game_init(Game * game) {
     IntArrayToSpriteMap(game->map, map);
 
     Sound door_open_sound = LoadSound("assets/door_open.mp3");
+    Sound door_close_sound = LoadSound("assets/door_close.mp3");
     // DOORS
     /*
     NOTES : 
@@ -128,9 +129,9 @@ void Game_init(Game * game) {
         Height ((y) +1) : 13
     */
     // Magnet door
-    game->doors[MAGNET_DOOR] = *Door_new(game->map, (Rectangle) {56, 44, 1, 13}, (Rectangle) {57, 44, 1, 13}, door_open_sound);
+    game->doors[MAGNET_DOOR] = *Door_new(game->map, (Rectangle) {56, 44, 1, 13}, (Rectangle) {57, 44, 1, 13}, door_open_sound, door_close_sound);
     // Prison door
-    game->doors[PRISON_DOOR] = *Door_new(game->map, (Rectangle) {24, 29, 1, 9}, (Rectangle) {23, 29, 3, 9}, door_open_sound);
+    game->doors[PRISON_DOOR] = *Door_new(game->map, (Rectangle) {24, 29, 1, 9}, (Rectangle) {23, 29, 3, 9}, door_open_sound, door_close_sound);
 }
 
 void Game_draw(Game * game) {

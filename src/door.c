@@ -2,7 +2,7 @@
 #include "includes/env.h"
 #include <stdlib.h>
 
-Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea, Sound sound) {
+Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea, Sound openSound, Sound closeSound) {
 	Door * door = malloc(sizeof(Door));
 	
 	// Add useArea overlay to map (only DEBUG mode)
@@ -28,7 +28,8 @@ Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea, Sound sound)
 			useArea.width * MAP_TEXTURE_SCALE,
 			useArea.height * MAP_TEXTURE_SCALE
 		};
-	door->sound = sound;
+	door->openSound = openSound;
+	door->closeSound = closeSound;
 	door->open = false;
 	return door;
 }
@@ -42,18 +43,21 @@ bool Door_open(GameMap * map, Door * door, Vector2 vector) {
 			}
 		}
 		door->open = true;
-		PlaySound(door->sound);
+		PlaySound(door->openSound);
 		return true;
 	}
 	return false;
 }
 
 void Door_close(GameMap * map, Door * door) {
-	for (int y = (int) door->bounds.y; y < (int) (door->bounds.y + door->bounds.height); y++) {
-		for (int x = (int) door->bounds.x; x < (int) (door->bounds.x + door->bounds.width); x++) {
-			map->sprite[y][x].color = RED;
-			map->sprite[y][x].blocking = true;
+	if (door->open) {
+		for (int y = (int) door->bounds.y; y < (int) (door->bounds.y + door->bounds.height); y++) {
+			for (int x = (int) door->bounds.x; x < (int) (door->bounds.x + door->bounds.width); x++) {
+				map->sprite[y][x].color = RED;
+				map->sprite[y][x].blocking = true;
+			}
 		}
+		door->open = false;
+		PlaySound(door->closeSound);
 	}
-	door->open = false;
 }

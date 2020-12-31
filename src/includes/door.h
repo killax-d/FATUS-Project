@@ -9,11 +9,12 @@
 typedef struct Door {
 	Rectangle bounds;
 	Rectangle useArea;
-	Sound sound;
+	Sound openSound;
+	Sound closeSound;
 	bool open;
 } Door;
 
-Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea, Sound sound);
+Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea, Sound openSound, Sound closeSound);
 
 bool Door_open(GameMap * map, Door * door, Vector2 vector);
 

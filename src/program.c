@@ -196,7 +196,8 @@ void UnloadGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, 
         free(&menu->buttons[i]);
     }
     for (int i = 0; i < DOORS_COUNT; i++) {
-        UnloadSound(game->doors[i].sound);
+        UnloadSound(game->doors[i].openSound);
+        UnloadSound(game->doors[i].closeSound);
         free(&game->doors[i]);
     }
     for (int y = 0; y < MAP_HEIGHT; y++)
