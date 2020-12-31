@@ -120,8 +120,9 @@ void InitGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, Ga
     camera->zoom = 0.5f;
     
     // ADD ITEMS FOR TEST
-    Inventory_addItem(game->player->inventory, gameItems->items[FLINT]);
-    Inventory_addItem(game->player->inventory, gameItems->items[NOTES]);
+    // Inventory_addItem(game->player->inventory, gameItems->items[FLINT]);
+    // Inventory_addItem(game->player->inventory, gameItems->items[NOTES]);
+    // Inventory_addItem(game->player->inventory, gameItems->items[MAGNET_CARD_GREEN]);
 }
 
 // Update game (one frame)

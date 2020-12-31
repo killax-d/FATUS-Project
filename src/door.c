@@ -50,8 +50,9 @@ bool Door_open(GameMap * map, Door * door, Vector2 vector, bool needCheck) {
 		}
 		door->open = true;
 		PlaySound(door->openSound);
+		return true;
 	}
-	return true;
+	return false;
 }
 
 void Door_close(GameMap * map, Door * door, Vector2 vector, bool needCheck) {

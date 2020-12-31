@@ -11,8 +11,8 @@ void Player_init(Player * player) {
 	player->position = 
 		(Vector2)
 		{
-			MAP_TEXTURE_SCALE * (MAP_WIDTH/2), 
-			MAP_TEXTURE_SCALE * (MAP_HEIGHT/2)
+            2330, 
+            2600
 		};
 	player->speed = 
 		(Vector2)
