@@ -34,8 +34,9 @@ Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea, Sound openSo
 	return door;
 }
 
-bool Door_open(GameMap * map, Door * door, Vector2 vector) {
-	if (!door->open && CheckCollisionPointRec(vector, door->useArea)) {
+bool Door_open(GameMap * map, Door * door, Vector2 vector, bool needCheck) {
+	if (door->open) return false;
+	if (!needCheck | CheckCollisionPointRec(vector, door->useArea)) {
 		for (int y = (int) door->bounds.y; y < (int) (door->bounds.y + door->bounds.height); y++) {
 			for (int x = (int) door->bounds.x; x < (int) (door->bounds.x + door->bounds.width); x++) {
 				map->sprite[y][x].color = YELLOW;
@@ -44,13 +45,13 @@ bool Door_open(GameMap * map, Door * door, Vector2 vector) {
 		}
 		door->open = true;
 		PlaySound(door->openSound);
-		return true;
 	}
-	return false;
+	return true;
 }
 
-void Door_close(GameMap * map, Door * door) {
-	if (door->open) {
+void Door_close(GameMap * map, Door * door, Vector2 vector, bool needCheck) {
+	if (!door->open) return;
+	if (!needCheck | CheckCollisionPointRec(vector, door->useArea)) {
 		for (int y = (int) door->bounds.y; y < (int) (door->bounds.y + door->bounds.height); y++) {
 			for (int x = (int) door->bounds.x; x < (int) (door->bounds.x + door->bounds.width); x++) {
 				map->sprite[y][x].color = RED;

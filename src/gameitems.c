@@ -4,17 +4,17 @@
 // Prison key function
 void usePrisonKey(Game * game, Item items[MAX_ITEMS]) {
     logger(LOG_DEBUG, "Using prison key!", "");
-    if (Door_open(game->map, &game->doors[PRISON_DOOR], game->player->position))
+    if (Door_open(game->map, &game->doors[PRISON_DOOR], game->player->position, true))
         logger(LOG_DEBUG, "Prison door is open!", "");
         //game->player->inventory->items[game->player->inventory->selected] = (Item) {0};
     else
-        Door_close(game->map, &game->doors[PRISON_DOOR]);
+        Door_close(game->map, &game->doors[PRISON_DOOR], game->player->position, true);
 }
 
 // Magnet card function
 void useMagnetCard(Game * game, Item items[MAX_ITEMS]) {
     logger(LOG_DEBUG, "Using magnet card!", "");
-    if (Door_open(game->map, &game->doors[MAGNET_DOOR], game->player->position))
+    if (Door_open(game->map, &game->doors[MAGNET_DOOR], game->player->position, true))
         Inventory_removeItem(game->player->inventory, MAGNET_CARD);
 }
 

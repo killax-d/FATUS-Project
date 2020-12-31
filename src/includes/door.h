@@ -16,8 +16,8 @@ typedef struct Door {
 
 Door * Door_new(GameMap * map, Rectangle bounds, Rectangle useArea, Sound openSound, Sound closeSound);
 
-bool Door_open(GameMap * map, Door * door, Vector2 vector);
+bool Door_open(GameMap * map, Door * door, Vector2 vector, bool needCheck);
 
-void Door_close(GameMap * map, Door * door);
+void Door_close(GameMap * map, Door * door, Vector2 vector, bool needCheck);
 
 #endif
