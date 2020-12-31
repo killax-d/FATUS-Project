@@ -201,8 +201,10 @@ void UnloadGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, 
         free(&game->doors[i]);
     }
     for (int y = 0; y < MAP_HEIGHT; y++)
-        for(int x = 0; x < MAP_WIDTH; x++)
+        for(int x = 0; x < MAP_WIDTH; x++) {
+            UnloadTexture(game->map->sprite[y][x].texture);
             free(&game->map->sprite[y][x]);
+        }
 
     free(&gameEntities);
     free(&camera);
