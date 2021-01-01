@@ -3,11 +3,13 @@
 
 // Engine key function
 void useEngineKey(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]) {
-    logger(LOG_DEBUG, "Using prison key!", "");
+    logger(LOG_DEBUG, "Using engine key!", "");
     if (Door_open(game->map, &game->doors[MOTOR1_DOOR], game->player->position, true))
-        logger(LOG_DEBUG, "Prison door is open!", "");
+        logger(LOG_DEBUG, "Engine room door is open!", "");
     if (Door_open(game->map, &game->doors[MOTOR2_DOOR], game->player->position, true))
-        logger(LOG_DEBUG, "Prison door is open!", "");
+        logger(LOG_DEBUG, "Engine room door is open!", "");
+
+    
     
 }
 
@@ -69,15 +71,7 @@ void craftBomb(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]) {
         logger(LOG_DEBUG, "You must have the Rope and Ammonium Nitrate!", "");
 }
 
-// Cell key function
-void useCellKey(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]) {
-    logger(LOG_DEBUG, "Using cell key!", "");
-    if (Door_open(game->map, &game->doors[CELL_DOOR], game->player->position, true))
-        logger(LOG_DEBUG, "Cell door is open!", "");
-}
-
 // Bomb function
-
 void useBomb(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]) {
     logger(LOG_DEBUG, "Using bomb!", "");
     if (Door_open(game->map, &game->doors[CELL_DOOR], game->player->position, true)) {
@@ -87,7 +81,11 @@ void useBomb(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]) {
     }
 }
 
+// USB Key function
 
+void useUSBKey(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]) {
+    logger(LOG_DEBUG, "Using USB Key!", "");
+}
 
 
 GameItems * GameItems_new() {
@@ -118,9 +116,6 @@ void GameItems_init(GameItems * gameItems) {
     gameItems->items[NOTES] = *Item_new(NOTES, "Notes", true, LoadTexture("assets/instructions.png"), item_pickup_sound);
     gameItems->use[NOTES] = useNotes;
 
-    gameItems->items[CELL_KEY] = *Item_new(CELL_KEY, "Cell Key", true, LoadTexture("assets/cell_key.png"), key_pickup_sound);
-    gameItems->use[CELL_KEY] = useCellKey;
-
     gameItems->items[MAGNET_CARD_GREEN] = *Item_new(MAGNET_CARD_GREEN, "Green Magnet Card", true, LoadTexture("assets/green_magnet_card.png"), item_pickup_sound);
     gameItems->use[MAGNET_CARD_GREEN] = useMagnetCardGreen;
 
@@ -135,6 +130,9 @@ void GameItems_init(GameItems * gameItems) {
     
     gameItems->items[BOMB] = *Item_new(BOMB, "Bomb", true, LoadTexture("assets/bomb.png"), item_pickup_sound);
     gameItems->use[BOMB] = useBomb;
+
+    gameItems->items[USB_KEY] = *Item_new(USB_KEY, "USB Key", true, LoadTexture("assets/usb_key.png"), item_pickup_sound);
+    gameItems->use[USB_KEY] = useUSBKey;
 
 }
 

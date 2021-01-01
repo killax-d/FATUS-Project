@@ -113,25 +113,25 @@ void IntArrayToSpriteMap(GameMap * map, int array[MAP_HEIGHT][MAP_WIDTH]) {
 		LoadTexture("assets/Tiles/Engine/image_part_028.png"),
 		LoadTexture("assets/Tiles/Engine/image_part_029.png"),
 		LoadTexture("assets/Tiles/Engine/image_part_030.png"),
+		LoadTexture("assets/Tiles/Screen/3/image_part_004.png"),
 		LoadTexture("assets/Tiles/Screen/3/image_part_001.png"),
 		LoadTexture("assets/Tiles/Screen/3/image_part_002.png"),
 		LoadTexture("assets/Tiles/Screen/3/image_part_003.png"),
-		LoadTexture("assets/Tiles/Screen/3/image_part_004.png"),
+		LoadTexture("assets/Tiles/Screen/2/image_part_004.png"),
 		LoadTexture("assets/Tiles/Screen/2/image_part_001.png"),
 		LoadTexture("assets/Tiles/Screen/2/image_part_002.png"),
 		LoadTexture("assets/Tiles/Screen/2/image_part_003.png"),
-		LoadTexture("assets/Tiles/Screen/2/image_part_004.png"),
 		{0},
 		{0},
 		{0},
+		LoadTexture("assets/Tiles/Screen/1/image_part_008.png"),
 		LoadTexture("assets/Tiles/Screen/1/image_part_001.png"),
 		LoadTexture("assets/Tiles/Screen/1/image_part_002.png"),
 		LoadTexture("assets/Tiles/Screen/1/image_part_003.png"),
 		LoadTexture("assets/Tiles/Screen/1/image_part_004.png"),
 		LoadTexture("assets/Tiles/Screen/1/image_part_005.png"),
 		LoadTexture("assets/Tiles/Screen/1/image_part_006.png"),
-		LoadTexture("assets/Tiles/Screen/1/image_part_007.png"),
-		LoadTexture("assets/Tiles/Screen/1/image_part_008.png")
+		LoadTexture("assets/Tiles/Screen/1/image_part_007.png")
 	};
 
 	for (int y = 0; y < MAP_HEIGHT; y++) {

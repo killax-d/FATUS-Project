@@ -18,11 +18,13 @@
 #define MAGNET_CARD_RED 8
 #define BOMB 9 
 #define ROPE 10 
+#define USB_KEY 11 
 
-#define SOUND_COUNT 2
+#define SOUND_COUNT 3
 
 #define CRAFT_SOUND 0
 #define BOMB_SOUND 1
+#define ENGINE_DOOR_SOUND 2
 
 typedef void (*useItem)(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
 
@@ -33,7 +35,7 @@ typedef struct GameItems {
 } GameItems;
 
 
-void usePrisonKey(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void useEngineKey(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
 void useMagnetCardBlue(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
 void useMagnetCardGreen(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
 void useMagnetCardRed(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
@@ -42,6 +44,7 @@ void useFlintActive(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT
 void useNotes(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
 void craftBomb(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
 void useBomb(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void useUSBKey(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
 
 GameItems * GameItems_new();
 
