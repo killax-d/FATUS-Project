@@ -192,6 +192,7 @@ void UnloadGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, 
         UnloadSound(gameItems->items[i].pickupSound);
         free(&gameItems->items[i]);
     }
+    for (int i = 0; i < SOUND_COUNT; i++) UnloadSound(gameItems->sounds[i]);
     for (int i = 0; i < BUTTONS_COUNT; i++) {
         UnloadSound(menu->buttons[i]->sound);
         free(&menu->buttons[i]);

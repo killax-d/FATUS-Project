@@ -19,24 +19,29 @@
 #define BOMB 9 
 #define ROPE 10 
 
-typedef void (*useItem)(Game * game, Item items[MAX_ITEMS]);
+#define SOUND_COUNT 2
+
+#define CRAFT_SOUND 0
+#define BOMB_SOUND 1
+
+typedef void (*useItem)(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
 
 typedef struct GameItems {
 	Item items[MAX_ITEMS];
 	useItem use[MAX_ITEMS];
+	Sound sounds[SOUND_COUNT];
 } GameItems;
 
 
-void usePrisonKey(Game * game, Item items[MAX_ITEMS]);
-void useMagnetCardBlue(Game * game, Item items[MAX_ITEMS]);
-void useMagnetCardGreen(Game * game, Item items[MAX_ITEMS]);
-void useMagnetCardRed(Game * game, Item items[MAX_ITEMS]);
-void useFlint(Game * game, Item items[MAX_ITEMS]);
-void useFlintActive(Game * game, Item items[MAX_ITEMS]);
-void useAmmoniumNitrate(Game * game, Item items[MAX_ITEMS]);
-void useNotes(Game * game, Item items[MAX_ITEMS]);
-void useBomb(Game * game, Item items[MAX_ITEMS]);
-void useRope(Game * game, Item items[MAX_ITEMS]);
+void usePrisonKey(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void useMagnetCardBlue(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void useMagnetCardGreen(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void useMagnetCardRed(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void useFlint(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void useFlintActive(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void useNotes(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void craftBomb(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void useBomb(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
 
 GameItems * GameItems_new();
 
