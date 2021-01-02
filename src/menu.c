@@ -1,4 +1,5 @@
 #include "includes/menu.h"
+#include "includes/env.h"
 
 void playHandle(Game * game) {
 	game->state = 0;
@@ -8,7 +9,7 @@ void settingsHandle(Game * game) {
 	logger(LOG_DEBUG, "Settings are not implemented yet!", "");
 }
 
-void Menu_init(Menu * menu) {
+void Menu_init(Menu * menu, Assets * assets) {
 	Button * play = Button_new(
 		(Rectangle) 
 		{
@@ -18,7 +19,7 @@ void Menu_init(Menu * menu) {
 			BUTTON_HEIGHT
 		},
 		"Play",
-		LoadSound("assets/button_hover.mp3"),
+		assets->sounds[BUTTON_HOVER_SOUND],
 		false,
 		playHandle
 	);
@@ -31,7 +32,7 @@ void Menu_init(Menu * menu) {
 			BUTTON_HEIGHT
 		},
 		"Settings",
-		LoadSound("assets/button_hover.mp3"),
+		assets->sounds[BUTTON_HOVER_SOUND],
 		false,
 		settingsHandle
 	);
@@ -49,11 +50,7 @@ void Menu_update(Menu * menu, Game * game) {
 }
 
 void Menu_draw(Menu * menu) {
-    BeginDrawing();
+    ClearBackground(LIGHTGRAY);
 
-        ClearBackground(LIGHTGRAY);
-
-		for (int i = 0; i < BUTTONS_COUNT; i++) Button_draw(menu->buttons[i]);
-
-    EndDrawing();
+	for (int i = 0; i < BUTTONS_COUNT; i++) Button_draw(menu->buttons[i]);
 }

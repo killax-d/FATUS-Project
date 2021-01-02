@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "./game.h"
 #include "./button.h"
+#include "./assets.h"
 
 #define BUTTONS_COUNT 2
 
@@ -13,7 +14,7 @@ typedef struct Menu {
 void playHandle(Game * game);
 void settingsHandle(Game * game);
 
-void Menu_init(Menu * menu);
+void Menu_init(Menu * menu, Assets * assets);
 
 void Menu_update(Menu * menu, Game * game);
 
