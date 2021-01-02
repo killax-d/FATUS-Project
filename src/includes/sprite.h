@@ -5,7 +5,6 @@
 typedef struct Sprite {
     Rectangle rect;
     bool blocking;
-    Color color;
     bool hasTexture;
     Texture2D texture;
 } Sprite;
