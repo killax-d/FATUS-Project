@@ -3,11 +3,10 @@
 
 Player * Player_new() {
 	Player * player = malloc(sizeof(Player));
-	Player_init(player);
 	return player;
 }
 
-void Player_init(Player * player) {
+void Player_init(Player * player, Assets * assets) {
 	player->position = 
 		(Vector2)
 		{
@@ -29,7 +28,7 @@ void Player_init(Player * player) {
 	player->sprinting = false;
 	player->direction = 0;
 	player->walkSprite = -1; 
-	player->texture = LoadTexture("assets/sprite_player.png");
+	player->texture = assets->textures[PLAYER_TEXTURE];
 }
 
 void Player_draw(Player * player) {

@@ -9,7 +9,7 @@ void settingsHandle(Game * game) {
 	logger(LOG_DEBUG, "Settings are not implemented yet!", "");
 }
 
-void Menu_init(Menu * menu) {
+void Menu_init(Menu * menu, Assets * assets) {
 	Button * play = Button_new(
 		(Rectangle) 
 		{
@@ -19,7 +19,7 @@ void Menu_init(Menu * menu) {
 			BUTTON_HEIGHT
 		},
 		"Play",
-		LoadSound("assets/button_hover.mp3"),
+		assets->sounds[BUTTON_HOVER_SOUND],
 		false,
 		playHandle
 	);
@@ -32,7 +32,7 @@ void Menu_init(Menu * menu) {
 			BUTTON_HEIGHT
 		},
 		"Settings",
-		LoadSound("assets/button_hover.mp3"),
+		assets->sounds[BUTTON_HOVER_SOUND],
 		false,
 		settingsHandle
 	);

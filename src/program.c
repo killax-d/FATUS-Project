@@ -11,6 +11,7 @@
 #include "includes/gameentities.h"
 #include "includes/minimap.h"
 #include "includes/menu.h"
+#include "includes/assets.h"
 #define WINDOW_BASE_WIDTH 800
 #define WINDOW_BASE_HEIGHT 600
 
@@ -41,17 +42,17 @@ void logger(int msgType, const char *text, va_list args)
 // Module Functions Declaration (local)
 //------------------------------------------------------------------------------------
 // Initialize game
-static void InitGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities);
+static void InitGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities, Assets * assets);
 // Update game (one frame)
-static void UpdateGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities);
+static void UpdateGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities, Assets * assets);
 // Update player (one frame)
 static void UpdatePlayer(Game * game, float delta);
 // Draw game (one frame)
 static void DrawGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameEntities * gameEntities);
 // Unload game
-static void UnloadGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities); 
+static void UnloadGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities, Assets * assets); 
 // Update and Draw (one frame)
-static void UpdateDrawFrame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities);
+static void UpdateDrawFrame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities, Assets * assets);
 // Update camera position
 static void UpdateCameraCenter(Camera2D * camera, Game * game);
 
@@ -61,6 +62,7 @@ static void UpdateCameraCenter(Camera2D * camera, Game * game);
 int main(void)
 {
     Camera2D camera = {0};
+    Assets assets;
     Game game;
     Menu menu;
     GameItems gameItems;
@@ -74,7 +76,7 @@ int main(void)
     SetTraceLogCallback(logger);
     InitWindow(WINDOW_BASE_WIDTH, WINDOW_BASE_HEIGHT, "50NuancesDeCodes - by IMT GRAY TEAM");
     
-    InitGame(&camera, &minimap, &menu, &game, &gameItems, &gameEntities);
+    InitGame(&camera, &minimap, &menu, &game, &gameItems, &gameEntities, &assets);
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
@@ -84,12 +86,12 @@ int main(void)
     {
         // Update and Draw
         //----------------------------------------------------------------------------------
-        UpdateDrawFrame(&camera, &minimap, &menu, &game, &gameItems, &gameEntities);
+        UpdateDrawFrame(&camera, &minimap, &menu, &game, &gameItems, &gameEntities, &assets);
         //----------------------------------------------------------------------------------
     }
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadGame(&camera, &minimap, &menu, &game, &gameItems, &gameEntities);     // Unload loaded data (textures, sounds, models...)
+    UnloadGame(&camera, &minimap, &menu, &game, &gameItems, &gameEntities, &assets);     // Unload loaded data (textures, sounds, models...)
     
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
@@ -98,13 +100,14 @@ int main(void)
 }
 
 // Initialize game variables
-void InitGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities) {
+void InitGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities, Assets * assets) {
     InitAudioDevice();
+    Assets_init(assets);
 
     // INIT GAME
-    Menu_init(menu);
-    Game_init(game);
-    GameItems_init(gameItems);
+    Menu_init(menu, assets);
+    Game_init(game, assets);
+    GameItems_init(gameItems, assets);
     GameEntities_init(gameEntities, gameItems);
 
     // INIT CAMERA
@@ -126,12 +129,12 @@ void InitGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, Ga
 }
 
 // Update game (one frame)
-void UpdateGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities) {
+void UpdateGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities, Assets * assets) {
     if (game->state == -1) Menu_update(menu, game);
     else {
         float deltaTime = GetFrameTime();
         Minimap_control(minimap);
-        GameItems_control(game, gameItems);
+        GameItems_control(game, gameItems, assets);
         GameEntities_control(game, gameEntities);
         GameEntities_update(game, gameEntities);
         UpdatePlayer(game, deltaTime);
@@ -185,29 +188,8 @@ void DrawGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, Ga
 }
 
 // Unload game
-void UnloadGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities) {
-    UnloadTexture(game->player->texture);
-    for (int i = 0; i < MAX_ITEMS; i++) {
-        UnloadTexture(gameItems->items[i].texture);
-        UnloadSound(gameItems->items[i].pickupSound);
-        free(&gameItems->items[i]);
-    }
-    for (int i = 0; i < SOUND_COUNT; i++) UnloadSound(gameItems->sounds[i]);
-    for (int i = 0; i < BUTTONS_COUNT; i++) {
-        UnloadSound(menu->buttons[i]->sound);
-        free(&menu->buttons[i]);
-    }
-    for (int i = 0; i < DOORS_COUNT; i++) {
-        UnloadSound(game->doors[i].openSound);
-        UnloadSound(game->doors[i].closeSound);
-        free(&game->doors[i]);
-    }
-    for (int y = 0; y < MAP_HEIGHT; y++)
-        for(int x = 0; x < MAP_WIDTH; x++) {
-            UnloadTexture(game->map->sprite[y][x].texture);
-            free(&game->map->sprite[y][x]);
-        }
-
+void UnloadGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities, Assets * assets) {
+    Assets_unload(assets);
     free(&gameEntities);
     free(&camera);
     free(&minimap);
@@ -220,9 +202,9 @@ void UnloadGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, 
 }
 
 // Update and Draw (one frame)
-void UpdateDrawFrame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities)
+void UpdateDrawFrame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, GameItems * gameItems, GameEntities * gameEntities, Assets * assets)
 {
-    UpdateGame(camera, minimap, menu, game, gameItems, gameEntities);
+    UpdateGame(camera, minimap, menu, game, gameItems, gameEntities, assets);
     DrawGame(camera, minimap, menu, game, gameEntities);
 }
 

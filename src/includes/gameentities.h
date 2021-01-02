@@ -3,7 +3,7 @@
 #include "./gameitemsentities.h"
 #include "./gameitems.h"
 
-#define MAX_ENTITIES_ITEMS 14
+#define MAX_ENTITIES_ITEMS 10
 // ITEM ENTITY ID
 #define ITEM_ENGINE_KEY_ENTITY 0
 #define ITEM_MAGNET_CARD_BLUE_ENTITY 1

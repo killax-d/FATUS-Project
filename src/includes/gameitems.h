@@ -20,35 +20,28 @@
 #define ROPE 10 
 #define USB_KEY 11 
 
-#define SOUND_COUNT 3
-
-#define CRAFT_SOUND 0
-#define BOMB_SOUND 1
-#define ENGINE_DOOR_SOUND 2
-
-typedef void (*useItem)(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+typedef void (*useItem)(Game * game, Item items[MAX_ITEMS], Assets * assets);
 
 typedef struct GameItems {
 	Item items[MAX_ITEMS];
 	useItem use[MAX_ITEMS];
-	Sound sounds[SOUND_COUNT];
 } GameItems;
 
 
-void useEngineKey(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
-void useMagnetCardBlue(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
-void useMagnetCardGreen(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
-void useMagnetCardRed(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
-void useFlint(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
-void useFlintActive(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
-void useNotes(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
-void craftBomb(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
-void useBomb(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
-void useUSBKey(Game * game, Item items[MAX_ITEMS], Sound sounds[SOUND_COUNT]);
+void useEngineKey(Game * game, Item items[MAX_ITEMS], Assets * assets);
+void useMagnetCardBlue(Game * game, Item items[MAX_ITEMS], Assets * assets);
+void useMagnetCardGreen(Game * game, Item items[MAX_ITEMS], Assets * assets);
+void useMagnetCardRed(Game * game, Item items[MAX_ITEMS], Assets * assets);
+void useFlint(Game * game, Item items[MAX_ITEMS], Assets * assets);
+void useFlintActive(Game * game, Item items[MAX_ITEMS], Assets * assets);
+void useNotes(Game * game, Item items[MAX_ITEMS], Assets * assets);
+void craftBomb(Game * game, Item items[MAX_ITEMS], Assets * assets);
+void useBomb(Game * game, Item items[MAX_ITEMS], Assets * assets);
+void useUSBKey(Game * game, Item items[MAX_ITEMS], Assets * assets);
 
 GameItems * GameItems_new();
 
-void GameItems_init(GameItems * gameItems);
+void GameItems_init(GameItems * gameItems, Assets * assets);
 
-void GameItems_control(Game * game, GameItems * gameItems);
+void GameItems_control(Game * game, GameItems * gameItems, Assets * assets);
 #endif

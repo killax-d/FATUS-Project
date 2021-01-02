@@ -5,6 +5,7 @@
 #include "./player.h"
 #include "./map.h"
 #include "./door.h"
+#include "./assets.h"
 #define COORDS_BUFFER_LENGTH 50
 #define DOORS_COUNT 7
 
@@ -23,7 +24,7 @@ typedef struct Game {
     char coordsText[COORDS_BUFFER_LENGTH];
 } Game;
 
-void Game_init(Game * game);
+void Game_init(Game * game, Assets * assets);
 
 void Game_draw(Game * game);
 

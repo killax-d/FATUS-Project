@@ -9,7 +9,7 @@ directories:
 	mkdir -p assets
 	cp -r assets ../$(OUTPUT)
 
-program: program.o item.o inventory.o collider.o player.o sprite.o map.o game.o gameitems.o button.o menu.o door.o minimap.o gameitemsentities.o gameentities.o
+program: program.o item.o inventory.o collider.o player.o sprite.o map.o game.o gameitems.o button.o menu.o door.o minimap.o gameitemsentities.o gameentities.o assets.o
 	$(CC) -o ../$(OUTPUT)/app-50NuancesDeCodes $^ $(LIBS)
 
 %.o: %.c
