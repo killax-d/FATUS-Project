@@ -30,3 +30,18 @@ bool Inventory_contain(Inventory * inv, int id) {
 	for (int i = 0; i < INVENTORY_SIZE; i++) if (inv->items[i].id == id) return true;
 	return false;
 }
+
+bool Inventory_addItem(Inventory * inv, Item item) {
+	if (inv->nbItems == INVENTORY_SIZE) return false;
+	inv->items[inv->nbItems++] = item;
+	return true;
+}
+
+void Inventory_removeItem(Inventory * inv, int id) {
+	bool found = false;
+	for (int i = 0; i < INVENTORY_SIZE; i++) {
+		if (found) inv->items[i-1] = inv->items[i];
+		if (inv->items[i].id == id) found = true;
+	}
+	inv->items[inv->nbItems--] = (Item) {0};
+}

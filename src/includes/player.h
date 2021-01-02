@@ -5,6 +5,7 @@
 #include "./collider.h"
 #include "./inventory.h"
 #include "./map.h"
+#include "./assets.h"
 #include <math.h>
 #define FRAME_RATE 8 //How many frames before switching animations
 #define PLAYER_SIZE 40
@@ -26,11 +27,11 @@ typedef struct Player {
 
 Player * Player_new();
 
-void Player_init(Player * player);
+void Player_init(Player * player, Assets * assets);
 
 void Player_draw(Player * player);
 
-void Player_control(Camera2D * camera, Player * player);
+void Player_control(Player * player);
 
 void Player_switchItem(Player * player, int selected);
 

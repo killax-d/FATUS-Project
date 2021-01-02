@@ -3,16 +3,15 @@
 
 Player * Player_new() {
 	Player * player = malloc(sizeof(Player));
-	Player_init(player);
 	return player;
 }
 
-void Player_init(Player * player) {
+void Player_init(Player * player, Assets * assets) {
 	player->position = 
 		(Vector2)
 		{
-			MAP_TEXTURE_SCALE * (MAP_WIDTH/2), 
-			MAP_TEXTURE_SCALE * (MAP_HEIGHT/2)
+            2330, 
+            2600
 		};
 	player->speed = 
 		(Vector2)
@@ -29,7 +28,7 @@ void Player_init(Player * player) {
 	player->sprinting = false;
 	player->direction = 0;
 	player->walkSprite = -1; 
-	player->texture = LoadTexture("assets/sprite_player.png");
+	player->texture = assets->textures[PLAYER_TEXTURE];
 }
 
 void Player_draw(Player * player) {
@@ -47,17 +46,12 @@ void Player_draw(Player * player) {
 		WHITE);
 }
 
-void Player_control(Camera2D * camera, Player * player) {
+void Player_control(Player * player) {
 	// Key switch (inventory)
     int keys[] = {KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_FIVE, KEY_SIX, KEY_SEVEN, KEY_EIGHT, KEY_NINE};
     for (int i = 0; i < 9; i++) if (IsKeyPressed(keys[i])) player->inventory->selected = keys[i] - KEY_ONE;
 
-    if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) {
-        // Zoom control
-        camera->zoom += ((float)GetMouseWheelMove()*0.05f);
-        if (camera->zoom > 3.0f) camera->zoom = 3.0f;
-        else if (camera->zoom < 0.25f) camera->zoom = 0.25f;
-    } else { 
+    if (!IsKeyDown(KEY_LEFT_CONTROL) && !IsKeyDown(KEY_RIGHT_CONTROL)) {
         // Mouse Wheel switch (inventory)
         player->inventory->selected -= GetMouseWheelMove();
         if (player->inventory->selected < 0) Player_switchItem(player, 0);
