@@ -90,6 +90,6 @@ cd /dist
 Dernière version stable : Release-1.0
 
 ## Documentation
-La documentation est disponible [ici](https://killax-d.github.io/docs/fatus/v1.0/).
+La documentation est disponible [ici](https://killax-d.github.io/docs/FATUS/v1.0/).
 
 [Linkwhichoverkillyourcomputeur](https://tu_es_mort)
