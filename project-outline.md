@@ -9,88 +9,96 @@ Each Functionnality groups several components to develop as UserStories under th
 
 ## Fct.1 - Project Framing.
 ---
-- @MainDevelopers: Dylan Donne | @Killax-D
-- @SecondaryDevelopers: Pierre Lictevout | @TekaB
+- @MainDevelopers: Dylan Donne | @Killax-D - @dylan.donne
 ---
 
 This functionality cover a framework for the team of developers.
 
-- [x] Developers can communicate with others (discord, ...)
-- [x] A developer can share a working directory (git, gitlab, ...)
-- [x] Hello World’s programmes can be completed and executed.
-- [x] Everyone can refer to documentation.
-- [x] A realize by merging contribution could be generated.
+- [x] Developers can communicate with others (discord, ...) @dylan.donne
+- [x] A developer can share a working directory (git, gitlab, ...) @dylan.donne
+- [x] Hello World’s programmes can be completed and executed. @dylan.donne
+- [x] Everyone can refer to documentation. @dylan.donne
+- [x] A realize by merging contribution could be generated. @dylan.donne
 - [ ] A solution for Unit Test is operational.
 
 ## Fct.2 - NetWorld
 ---
-- @MainDevelopers: Pierre Lictevout | @TekaB
-- @SecondaryDevelopers: Alexandre Leva | @Rokem-prog
+- @MainDevelopers: Alexandre Leva | @Rokem-prog - @alexandre.leva
+- @SecondaryDevelopers: Carl Dhennin | @carl.dhennin
+
+- @SupportDevelopers: Dylan Donne | @Killax-D - @dylan.donne
 ---
 
 NetWorld represent the center piece of the game engine. It is the programme component that glue all the others. 
 It is an environment for the game entities, viewed as a planar graph modelling all the possible movements. 
 
-- [x] A NetWorld is composed of nodes at specific position (x,y).
-- [x] Nodes are connected to other with edges.
-- [x] Nodes can contain entities.
-- [x] It is possible to generate NetWorld randomly (example: random nodes and Gabriel graph).
-- [x] An algorithm provides paths in the NetWorld between two positions (A*).
-- [x] Long edges are subdivided with intermediate nodes in order to generate an almost regular game tabletop.
+- [x] A NetWorld is composed of nodes at specific position (x,y). @dylan.donne & @jules.decottignies
+- [x] Nodes are connected to other with edges. @dylan.donne & @jules.decottignies
+- [x] Nodes can contain entities. @dylan.donne
+- [x] It is possible to generate NetWorld randomly (example: random nodes and Gabriel graph). @dylan.donne
+- [x] An algorithm provides paths in the NetWorld between two positions (A*). @alexandre.leva & @carl.dhennin
+- [x] Long edges are subdivided with intermediate nodes in order to generate an almost regular game tabletop. @dylan.donne & @carl.dhennin
 
 ## Fct.3 - Entities
 
 ---
-- @MainDevelopers: Jules Decottignies | @juliodctg
-- @SecondaryDevelopers: Nabil Bentayaa | @bilnamd
-- @TertiaryDevelopers: Samad Rokia | @Samad-Rokia
+- @MainDevelopers: Jules Decottignies | @juliodctg - @jules.decottignies
+- @SecondaryDevelopers: Nabil Bentayaa | @bilnamd - @nabil.bentayaa
+- @TertiaryDevelopers: Samad Rokia | @Samad-Rokia - @samad.rokia
+
+- @SupportDevelopers: Dylan Donne | @Killax-D - @dylan.donne
 ---
 
 Entities are the game element capable of actions. This functionality mainly regroups the basic interactions of those entities between them and with the NetWorld.
 
 
-- [x] An entity is at a specific node.
-- [x] Entities see the different possible movements (edges from the nodes) and can try one. The movement succeed only if the node is not over populated.
-- [x] Entities can act on the NetWorld (change the colour of a node for instance).
-- [x] Entities can act over other entities (damaging them for instance).
+- [x] An entity is at a specific node. @dylan.donne
+- [x] Entities see the different possible movements (edges from the nodes) and can try one. The movement succeed only if the node is not over populated. @dylan.donne
+- [x] Entities can act on the NetWorld (change the colour of a node for instance). @nabil.bentayaa & @samad.rokia
+- [x] Entities can act over other entities (damaging them for instance). @nabil.bentayaa & @samad.rokia
 
 ## Fct.4 - User Interface
 ---
-- @MainDevelopers: Alexandre Leva | @Rokem-prog
-- @SecondaryDevelopers: Pierre Lictevout | @TekaB
+- @MainDevelopers: Dylan Donne | @Killax-D - @dylan.donne
+- @SecondaryDevelopers: Jules Decottignies | @juliodctg - @jules.decottignies
 ---
 
 This functionality focus on a graphical rendering of the NetWold and to provide a control through the mouse and keyboard.
 
-- [x] The program starts on welcome menu
-- [x] It is possible to launch and visualize a NetWorld and its Entities
+- [x] The program starts on welcome menu @dylan.donne
+- [x] It is possible to launch and visualize a NetWorld and its Entities @dylan.donne
 - [ ] Players can save and load a game 
 - [ ] Players can select its own entities and provide them for an expected location.
-- [x] Animations are triggered when an entity move from a node to another.
+- [x] Animations are triggered when an entity move from a node to another. @jules.decottignies
 
 
 ## Fct.5 - Robust Development environment
 ---
-- @MainDevelopers: Jules Decottignies | @juliodctg
-- @SecondaryDevelopers: Dylan Donne | @Killax-D
+- @MainDevelopers: Dylan Donne | @Killax-D - @dylan.donne
+- @SecondaryDevelopers: Jules Decottignies | @juliodctg - @jules.decottignies
 ---
 
-- [x] All developers can refer to a good-practice doc for code.
+- [x] All developers can refer to a good-practice doc for code. @dylan.donne
 - [ ] Developers would use a proper C unit-test framework.
 
 
 ## Fct.5 - Game-play
 ---
-- @MainDevelopers: Samad Rokia | @Samad-Rokia
-- @SecondaryDevelopers: Nabil Bentayaa | @bilnamd
+- @MainDevelopers: Samad Rokia | @Samad-Rokia - @samad.rokia
+- @SecondaryDevelopers: Nabil Bentayaa | @bilnamd - @nabil.bentayaa
+
+- @SupportDevelopers: Dylan Donne | @Killax-D - @dylan.donne
 ---
 
-- [x] It is time to define a game objectives and maybe change the name of the project.
+- [x] It is time to define a game objectives and maybe change the name of the project. @samad.rokia, @nabil.bentayaa & @dylan.donne
 
 ## Fct.6 - Programme distributed programme
 ---
-- @MainDevelopers: Samad Rokia | @Samad-Rokia
-- @SecondaryDevelopers: Nabil Bentayaa | @bilnamd
+- @MainDevelopers: Samad Rokia | @Samad-Rokia - @samad.rokia
+- @SecondaryDevelopers: Nabil Bentayaa | @bilnamd - @nabil.bentayaa
+- @TertiaryDevelopers: Ismaël Rousseau | @ismael.rousseau
+
+- @SupportDevelopers: Dylan Donne | @Killax-D - @dylan.donne
 ---
 
 The goal here is to distribute the game process.
