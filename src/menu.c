@@ -20,7 +20,6 @@ void Menu_init(Menu * menu, Assets * assets) {
 		},
 		"Play",
 		assets->sounds[BUTTON_HOVER_SOUND],
-		false,
 		playHandle
 	);
 	Button * settings = Button_new(
@@ -33,7 +32,6 @@ void Menu_init(Menu * menu, Assets * assets) {
 		},
 		"Settings",
 		assets->sounds[BUTTON_HOVER_SOUND],
-		false,
 		settingsHandle
 	);
 	menu->buttons[0] = play;

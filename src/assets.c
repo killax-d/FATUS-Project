@@ -153,10 +153,19 @@ void Assets_init(Assets * assets) {
 	assets->textures[AMMONIUM_NITRATE_TEXTURE] = LoadTexture("assets/ammonium_nitrate.png");
 	assets->textures[CELL_KEY_TEXTURE] = LoadTexture("assets/cell_key.png");
 	assets->textures[MAGNET_CARD_GREEN_TEXTURE] = LoadTexture("assets/green_magnet_card.png");
+	assets->textures[MAGNET_CARD_YELLOW_TEXTURE] = LoadTexture("assets/yellow_magnet_card.png");
 	assets->textures[MAGNET_CARD_RED_TEXTURE] = LoadTexture("assets/red_magnet_card.png");
 	assets->textures[BOMB_TEXTURE] = LoadTexture("assets/bomb.png");
 	assets->textures[ROPE_TEXTURE] = LoadTexture("assets/rope.png");
 	assets->textures[USB_KEY_TEXTURE] = LoadTexture("assets/usb_key.png");
+	assets->textures[PLAYER_HEART_TEXTURE] = LoadTexture("assets/heart.png");
+	assets->textures[PLAYER_HEART_DARK_TEXTURE] = LoadTexture("assets/heart_dark.png");
+	assets->textures[OBJECTIVES_BACKGROUND_TEXTURE] = LoadTexture("assets/objectives.png");
+	assets->textures[OBJECTIVE_TEXTURE] = LoadTexture("assets/objective.png");
+	assets->textures[OBJECTIVE_TICKED_TEXTURE] = LoadTexture("assets/objective_ticked.png");
+	assets->textures[ALIEN_TEXTURE] = LoadTexture("assets/alien.png");
+
+
 
 	assets->textures[USE_AREA_TEXTURE] = LoadTexture("assets/Tiles/Default/Use_Area.png");
 	assets->textures[DOOR_TEXTURE] = LoadTexture("assets/Tiles/Default/Door.png");
@@ -171,6 +180,7 @@ void Assets_init(Assets * assets) {
     assets->sounds[KEY_PICKUP_SOUND] = LoadSound("assets/key_pickup.mp3");
 	assets->sounds[CRAFT_SOUND] = LoadSound("assets/craft.mp3");
 	assets->sounds[BOMB_SOUND] = LoadSound("assets/bomb.mp3");
+	assets->sounds[TAKE_DAMAGE_SOUND] = LoadSound("assets/take_damage.mp3");
 	
 }
 
