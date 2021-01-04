@@ -3,7 +3,7 @@
 #include "game.h"
 #include "item.h"
 #include "inventory.h"
-#include "Objectivesnotes.h"
+#include "objectivesnotes.h"
 
 // Max items defined in game
 #define MAX_ITEMS 12 /**< Defines the maximum amount of Item in the game */
