@@ -2,7 +2,7 @@
 #define INVENTORY_H
 #include "raylib.h"
 #include "stdlib.h"
-#include "./Item.h"
+#include "./item.h"
 #define INVENTORY_SIZE 9 /**< MAX Inventory size */
 #define TEXT_SELECTED_ITEM_BUFFER_LENGTH 50 /**< The selected Item Text Buffer length */
 
