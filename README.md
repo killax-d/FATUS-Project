@@ -1,6 +1,4 @@
-Readme
-
-# 50 nuances de codes
+# 50 Nuances De Codes
 
 Petit jeu 2D qui vous procura une grande dose de bonheur (metacritic 98/100).
 Réalisé par Samad, Jules, Dylan, Ismaël, Nabil, Carl, Alexandre... peut-être Pierre mais je l'ai pas vu xD 
@@ -26,9 +24,9 @@ sudo apt install libasound2-dev mesa-common-dev libx11-dev libxrandr-dev libxi-d
 ```
 ## Compiler et installer Raylib 3.0.0 
 ```bash
- ##on choisi le répertoire de son choix 
- cd ~/Document/Cours 
-##puis clonage et compilation
+## on choisi le répertoire de son choix 
+cd ~/Documents 
+## puis clonage et compilation
 
 git clone https://github.com/raysan5/raylib.git raylib
 cd raylib
@@ -52,7 +50,7 @@ rm -fr raylib
 ## terminal
 git clone https://gvipers.imt-lille-douai.fr/fatus/50NuancesDeCode/game
 
-##dans le répertoire game
+## dans le répertoire game
 
 make
 
@@ -83,6 +81,6 @@ cd /dist
 |                          <h6 style="margin: 0">@Julio</h6><img src="https://cdn.discordapp.com/attachments/787703407325609984/795368766778245160/deguise-en-jeff-tuche-un-gilet-jaune-fait-le-buzz-sur-les-reseaux-sociaux.jpeg" alt="Julio" height="120" style="vertical-align:top; margin:4px">                          	|        Developer        	|         <img height="150" src="https://media1.tenor.com/images/c7504b9fb03c95b3b5687d744687e11c/tenor.gif" />         	|
 
 ## Version
-Dernière version stable : B-1.0
+Dernière version stable : Release-1.0
 
 [Linkwhichoverkillyourcomputeur](https://tu_es_mort)
