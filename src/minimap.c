@@ -51,7 +51,7 @@ void Minimap_draw(Minimap * minimap, Game * game) {
             float drawY = minimap->y + (i+minimap->zooms_availables[minimap->zoom]/2)*minimap->scale;
             if ((y+i >= 0 && y+i < MAP_HEIGHT && x+j >= 0 && x+j < MAP_WIDTH)
             	&& (drawX < minimap->x + minimap->size && drawY < minimap->y + minimap->size))
-            	if (game->map->sprite[y+i][x+j].hasTexture)
+            	if (game->map->sprite[y+i][x+j]->hasTexture)
 	                DrawRectangleRec(
 	                    (Rectangle)
 	                        { 
@@ -60,7 +60,7 @@ void Minimap_draw(Minimap * minimap, Game * game) {
 	                        	minimap->scale, 
 	                        	minimap->scale 
 	                        },
-	                    game->map->sprite[y+i][x+j].blocking ? DARKGRAY : LIGHTGRAY);
+	                    game->map->sprite[y+i][x+j]->blocking ? DARKGRAY : LIGHTGRAY);
         }
     // Player
     DrawRectangleRec((Rectangle)

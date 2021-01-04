@@ -128,22 +128,28 @@ void Game_init(Game * game, Assets * assets) {
         Height ((y) +1) : 13
     */
     // Magnet door
-    game->doors[MAGNET_DOOR] = *Door_new(game->map, (Rectangle) {56, 44, 1, 13}, (Rectangle) {57, 44, 1, 13}, assets->sounds[DOOR_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
+    game->doors[MAGNET_DOOR] = Door_new(game->map, (Rectangle) {56, 44, 1, 13}, (Rectangle) {57, 44, 1, 13}, assets->sounds[DOOR_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
     // Cell door
-    game->doors[CELL_DOOR] = *Door_new(game->map, (Rectangle) {79, 80, 1, 12}, (Rectangle) {78, 80, 3, 12}, assets->sounds[DOOR_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
+    game->doors[CELL_DOOR] = Door_new(game->map, (Rectangle) {79, 80, 1, 12}, (Rectangle) {78, 80, 3, 12}, assets->sounds[DOOR_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
     // Magnet door 1
-     game->doors[MAGNET_DOOR1] = *Door_new(game->map, (Rectangle) {97, 68, 17, 1}, (Rectangle) {97, 68, 17,2}, assets->sounds[DOOR_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
+     game->doors[MAGNET_DOOR1] = Door_new(game->map, (Rectangle) {97, 68, 17, 1}, (Rectangle) {97, 68, 17,2}, assets->sounds[DOOR_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
     // Magnet door 2
-     game->doors[MAGNET_DOOR2] = *Door_new(game->map, (Rectangle) {97, 31, 17, 1}, (Rectangle) {97, 31, 17, 2}, assets->sounds[DOOR_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
+     game->doors[MAGNET_DOOR2] = Door_new(game->map, (Rectangle) {97, 31, 17, 1}, (Rectangle) {97, 31, 17, 2}, assets->sounds[DOOR_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
     // Magnet door 3
-    game->doors[MAGNET_DOOR3] = *Door_new(game->map, (Rectangle) {134, 44, 1, 13}, (Rectangle) {133, 44, 1, 13}, assets->sounds[DOOR_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
+    game->doors[MAGNET_DOOR3] = Door_new(game->map, (Rectangle) {134, 44, 1, 13}, (Rectangle) {133, 44, 1, 13}, assets->sounds[DOOR_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
     // Motor door 1
-    game->doors[MOTOR1_DOOR] = *Door_new(game->map, (Rectangle) {24, 29, 1, 9}, (Rectangle) {23, 29, 3, 9}, assets->sounds[DOOR_ENGINE_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
+    game->doors[MOTOR1_DOOR] = Door_new(game->map, (Rectangle) {24, 29, 1, 9}, (Rectangle) {23, 29, 3, 9}, assets->sounds[DOOR_ENGINE_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
     // Motor door 2
-    game->doors[MOTOR2_DOOR] = *Door_new(game->map, (Rectangle) {24, 62, 1, 9}, (Rectangle) {23, 62, 3, 9}, assets->sounds[DOOR_ENGINE_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
+    game->doors[MOTOR2_DOOR] = Door_new(game->map, (Rectangle) {24, 62, 1, 9}, (Rectangle) {23, 62, 3, 9}, assets->sounds[DOOR_ENGINE_OPEN_SOUND], assets->sounds[DOOR_OPEN_SOUND], assets->textures[DOOR_TEXTURE], assets->textures[DOOR_OPEN_TEXTURE], assets->textures[USE_AREA_TEXTURE]);
 }
 
 void Game_draw(Game * game) {
+    int position[2] = {(int) game->player->position.x/MAP_TEXTURE_SCALE, (int) game->player->position.y/MAP_TEXTURE_SCALE};
     // DRAW MAP
-    Map_draw(game->map);
+    Map_draw(game->map, position);
+}
+
+void Game_end(Game * game) {
+    game->state = 1;
+    game->gameOver = game->player->life == 0;
 }

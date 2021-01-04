@@ -10,7 +10,7 @@ Item * Item_new(int id, char * name, bool hasTexture, Texture2D texture, Sound p
 	return item;
 }
 
-void Item_draw(int x, int y, Item item) {
-    if (item.hasTexture) DrawTexture(item.texture, x+4, y+4, WHITE);
+void Item_draw(int x, int y, Item * item) {
+    if (item && item->hasTexture) DrawTexture(item->texture, x+4, y+4, WHITE);
     else DrawRectangle(x+4, y+4, ITEM_TEXTURE_SCALE, ITEM_TEXTURE_SCALE, PINK);
 }

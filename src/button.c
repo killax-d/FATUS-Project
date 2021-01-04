@@ -1,11 +1,11 @@
 #include "includes/button.h"
 
-Button * Button_new(Rectangle rect, char * text, Sound sound, bool focused, Action handle) {
+Button * Button_new(Rectangle rect, char * text, Sound sound, Action handle) {
 	Button * button = malloc(sizeof(Button));
 	button->rect = rect;
 	button->text = text;
     button->sound = sound;
-    button->focused = focused;
+    button->focused = false;
     button->handle = handle;
     return button;
 }

@@ -15,12 +15,12 @@ Each Functionnality groups several components to develop as UserStories under th
 
 This functionality cover a framework for the team of developers.
 
-- Developers can communicate with others (discord, ...)
-- A developer can share a working directory (git, gitlab, ...)
-- Hello World’s programmes can be completed and executed.
-- Everyone can refer to documentation.
-- A realize by merging contribution could be generated.
-- A solution for Unit Test is operational.
+- [x] Developers can communicate with others (discord, ...)
+- [x] A developer can share a working directory (git, gitlab, ...)
+- [x] Hello World’s programmes can be completed and executed.
+- [x] Everyone can refer to documentation.
+- [x] A realize by merging contribution could be generated.
+- [ ] A solution for Unit Test is operational.
 
 ## Fct.2 - NetWorld
 ---
@@ -31,12 +31,12 @@ This functionality cover a framework for the team of developers.
 NetWorld represent the center piece of the game engine. It is the programme component that glue all the others. 
 It is an environment for the game entities, viewed as a planar graph modelling all the possible movements. 
 
-- A NetWorld is composed of nodes at specific position (x,y).
-- Nodes are connected to other with edges.
-- Nodes can contain entities.
-- It is possible to generate NetWorld randomly (example: random nodes and Gabriel graph).
-- An algorithm provides paths in the NetWorld between two positions (A*).
-- Long edges are subdivided with intermediate nodes in order to generate an almost regular game tabletop.
+- [x] A NetWorld is composed of nodes at specific position (x,y).
+- [x] Nodes are connected to other with edges.
+- [x] Nodes can contain entities.
+- [x] It is possible to generate NetWorld randomly (example: random nodes and Gabriel graph).
+- [x] An algorithm provides paths in the NetWorld between two positions (A*).
+- [x] Long edges are subdivided with intermediate nodes in order to generate an almost regular game tabletop.
 
 ## Fct.3 - Entities
 
@@ -49,14 +49,10 @@ It is an environment for the game entities, viewed as a planar graph modelling a
 Entities are the game element capable of actions. This functionality mainly regroups the basic interactions of those entities between them and with the NetWorld.
 
 
-- An entity is at a specific node.
-- Entities see the different possible movements (edges from the nodes) and can try one. The movement succeed only if the node is not over populated.
-- Entities can act on the NetWorld (change the colour of a node for instance).
-- Entities can act over other entities (damaging them for instance).
-
-@MainDevelopers:
-
-@SecondaryDevelopers:
+- [x] An entity is at a specific node.
+- [x] Entities see the different possible movements (edges from the nodes) and can try one. The movement succeed only if the node is not over populated.
+- [x] Entities can act on the NetWorld (change the colour of a node for instance).
+- [x] Entities can act over other entities (damaging them for instance).
 
 ## Fct.4 - User Interface
 ---
@@ -66,11 +62,11 @@ Entities are the game element capable of actions. This functionality mainly regr
 
 This functionality focus on a graphical rendering of the NetWold and to provide a control through the mouse and keyboard.
 
-- The program starts on welcome menu
-- It is possible to launch and visualize a NetWorld and its Entities
-- Players can save and load a game 
-- Players can select its own entities and provide them for an expected location.
-- Animations are triggered when an entity move from a node to another.
+- [x] The program starts on welcome menu
+- [x] It is possible to launch and visualize a NetWorld and its Entities
+- [ ] Players can save and load a game 
+- [ ] Players can select its own entities and provide them for an expected location.
+- [x] Animations are triggered when an entity move from a node to another.
 
 
 ## Fct.5 - Robust Development environment
@@ -79,17 +75,17 @@ This functionality focus on a graphical rendering of the NetWold and to provide 
 - @SecondaryDevelopers: Dylan Donne | @Killax-D
 ---
 
-- All developers can refer to a good-practice doc for code.
-- Developers would use a proper C unit-test framework.
+- [x] All developers can refer to a good-practice doc for code.
+- [ ] Developers would use a proper C unit-test framework.
 
 
 ## Fct.5 - Game-play
 ---
-- @MainDevelopers: Alexandre Leva | @Rokem-prog
-- @SecondaryDevelopers: Pierre Lictevout | @TekaB
+- @MainDevelopers: Samad Rokia | @Samad-Rokia
+- @SecondaryDevelopers: Nabil Bentayaa | @bilnamd
 ---
 
-It is time to define a game objectives and maybe change the name of the project.
+- [x] It is time to define a game objectives and maybe change the name of the project.
 
 ## Fct.6 - Programme distributed programme
 ---
@@ -99,11 +95,11 @@ It is time to define a game objectives and maybe change the name of the project.
 
 The goal here is to distribute the game process.
 
-- A player owns entities.
-- The player process can be executed on an independent computer process (network)
-- The NetWorld simulation can be distributed over processes.
-- The game is reachable from a web interface.
+- [ ] A player owns entities.
+- [ ] The player process can be executed on an independent computer process (network)
+- [ ] The NetWorld simulation can be distributed over processes.
+- [ ] The game is reachable from a web interface.
 
 ## Fct.7 - Tanks
 
-Nodes are defined with a collection of tanks  where resources can be placed. (water for instance)
+- [ ] Nodes are defined with a collection of tanks  where resources can be placed. (water for instance)

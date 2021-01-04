@@ -20,15 +20,16 @@ void Player_init(Player * player, Assets * assets) {
 			200.f
 		};
 	player->acceleration = 1.75f;
-	player->rotation = 0.f;
-	player->size = PLAYER_SIZE;
 	player->collider = Collider_new();
-	player->color = WHITE;
 	player->inventory = Inventory_new();
 	player->sprinting = false;
 	player->direction = 0;
 	player->walkSprite = -1; 
 	player->texture = assets->textures[PLAYER_TEXTURE];
+    player->damageSound = assets->sounds[TAKE_DAMAGE_SOUND];
+
+    player->life = PLAYER_MAX_LIFE;
+    player->invulnerabilityCooldown = 0;
 }
 
 void Player_draw(Player * player) {
@@ -44,6 +45,13 @@ void Player_draw(Player * player) {
 			player->position.y - PLAYER_SIZE/2
 		}, 
 		WHITE);
+}
+
+void Player_drawLife(int x, int y, Player * player, Assets * assets) {
+    // 32 is the size of the heart texture
+    // 4 is the margin between hearts
+    for (int i = 0; i < player->life; i++) DrawTexture(assets->textures[PLAYER_HEART_TEXTURE], x + (i * (32 + 4)), y, WHITE);
+    for (int i = player->life; i < PLAYER_MAX_LIFE; i++) DrawTexture(assets->textures[PLAYER_HEART_DARK_TEXTURE], x + (i * (32 + 4)), y, WHITE);
 }
 
 void Player_control(Player * player) {
@@ -63,13 +71,14 @@ void Player_control(Player * player) {
 
     // Is player sprinting ?
 	player->sprinting = IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT);
-
+    if (player->invulnerabilityCooldown > 0) player->invulnerabilityCooldown--;
+    player->invulnerable = player->invulnerabilityCooldown > 0;
 }
 
 void Player_switchItem(Player * player, int selected) {
 	player->inventory->selected = selected;
-    if (player->inventory->items[selected].name != 0x0)
-        sprintf(player->inventory->selectedText, "Selected: %s", player->inventory->items[selected].name);
+    if (player->inventory->items[selected] != 0x0)
+        sprintf(player->inventory->selectedText, "Selected: %s", player->inventory->items[selected]->name);
 }
 
 void Player_move(GameMap * map, Player * player, float delta) {
@@ -120,7 +129,7 @@ void Player_collisions(GameMap * map, Player * player, Vector2 speed) {
     // Check all collisions with 3 blocs width
     for (int i = -1; i <= 1; i++) {
         // Retrieve the player position in the map 2D Array
-        int location[2] = {(int) (player->position.x/MAP_TEXTURE_SCALE), (int) (player->position.y/MAP_TEXTURE_SCALE)};
+        int location[2] = {(int) ((player->position.x+8)/MAP_TEXTURE_SCALE), (int) ((player->position.y+8)/MAP_TEXTURE_SCALE)};
 
         // Retrieve current position of player
         Vector2 p = player->position;
@@ -130,7 +139,7 @@ void Player_collisions(GameMap * map, Player * player, Vector2 speed) {
         [ , p,  ]
         [ ,  ,  ]
         */
-        Sprite ei = map->sprite[location[1]-1][location[0]+i];
+        Sprite ei = *map->sprite[location[1]-1][location[0]+i];
         if (ei.blocking &&
             ei.rect.y + ei.rect.height <= p.y+PLAYER_SIZE/2 &&
             ei.rect.y + ei.rect.height >= p.y-PLAYER_SIZE/2 &&
@@ -145,7 +154,7 @@ void Player_collisions(GameMap * map, Player * player, Vector2 speed) {
         [ , p, x]
         [ ,  , x]
         */
-        ei = map->sprite[location[1]+i][location[0]+1];
+        ei = *map->sprite[location[1]+i][location[0]+1];
         if (ei.blocking &&
             ei.rect.x <= p.x+PLAYER_SIZE/2 &&
             ei.rect.x > p.x-PLAYER_SIZE/2 &&
@@ -160,7 +169,7 @@ void Player_collisions(GameMap * map, Player * player, Vector2 speed) {
         [ , p,  ]
         [x, x, x]
         */
-        ei = map->sprite[location[1]+1][location[0]+i];
+        ei = *map->sprite[location[1]+1][location[0]+i];
         if (ei.blocking &&
             ei.rect.y <= p.y+PLAYER_SIZE/2 &&
             ei.rect.y > p.y-PLAYER_SIZE/2 &&
@@ -175,7 +184,7 @@ void Player_collisions(GameMap * map, Player * player, Vector2 speed) {
         [x, p,  ]
         [x,  ,  ]
         */
-        ei = map->sprite[location[1]+i][location[0]-1];
+        ei = *map->sprite[location[1]+i][location[0]-1];
         if (ei.blocking &&
             ei.rect.x + ei.rect.width <= p.x+PLAYER_SIZE/2 &&
             ei.rect.x + ei.rect.width >= p.x-PLAYER_SIZE/2 &&
@@ -185,4 +194,11 @@ void Player_collisions(GameMap * map, Player * player, Vector2 speed) {
             player->collider->LEFT = true;
         }
     }
+}
+
+void Player_damage(Player * player) {
+    if (player->life == 0) return;
+    PlaySound(player->damageSound);
+    player->life--;
+    player->invulnerabilityCooldown = INVULNERABILITY_COOLDOWN;
 }

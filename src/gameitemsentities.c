@@ -13,24 +13,24 @@ GameItemsEntities * GameItemsEntities_new(int id, Vector2 position, Item * item,
 }
 
 void GameItemsEntities_update(Game * game, GameItemsEntities * gameItemsEntity) {
-	if (!gameItemsEntity->visible) return;
+	if (!gameItemsEntity || !gameItemsEntity->visible) return;
 	gameItemsEntity->canPickup = CheckCollisionPointCircle(game->player->position, gameItemsEntity->position, gameItemsEntity->radiusPickup);
 }
 
 void GameItemsEntities_control(Game * game, GameItemsEntities * gameItemsEntity) {
-	if (!gameItemsEntity->visible) return;
+	if (!gameItemsEntity || !gameItemsEntity->visible) return;
 	if (gameItemsEntity->canPickup)
-		if(Inventory_addItem(game->player->inventory, *gameItemsEntity->item)) {
+		if(Inventory_addItem(game->player->inventory, gameItemsEntity->item)) {
 			gameItemsEntity->visible = false;
 			PlaySound(gameItemsEntity->item->pickupSound);
 		}
 }
 
 void GameItemsEntities_draw(GameItemsEntities * gameItemsEntity) {
-	if (!gameItemsEntity->visible) return;
+	if (!gameItemsEntity || !gameItemsEntity->visible) return;
 	// Debug radius
 	if (DEBUG)
-		DrawCircle(gameItemsEntity->position.x, gameItemsEntity->position.y, gameItemsEntity->radiusPickup, PINK);// (Color) { 255, 109, 194, 75 });  
+		DrawCircle(gameItemsEntity->position.x, gameItemsEntity->position.y, gameItemsEntity->radiusPickup, (Color) { 255, 109, 194, 75 });  
 
 	if(gameItemsEntity->canPickup) {
 		// Can pickup background
