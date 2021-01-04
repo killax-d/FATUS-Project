@@ -218,18 +218,18 @@ void UnloadGame(Camera2D * camera, Minimap * minimap, Menu * menu, Game * game, 
         free(gameEntities->iaEntities[i]);
     for (int i = 0; i < game->player->inventory->nbItems; i++)
         free(game->player->inventory->items[i]);
-    free(&objectives);
-    free(&gameEntities);
-    free(&camera);
-    free(&minimap);
+    free(objectives);
+    free(gameEntities);
+    free(camera);
+    free(minimap);
     free(game->player->inventory);
     free(game->player->collider);
     free(game->player);
     free(game->map);
-    free(&game);
+    free(game);
 
     Assets_unload(assets);
-    free(&assets);
+    free(assets);
 
     CloseAudioDevice();
 }

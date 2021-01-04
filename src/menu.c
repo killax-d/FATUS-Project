@@ -6,7 +6,7 @@ void playHandle(Game * game) {
 }
 
 void settingsHandle(Game * game) {
-	logger(LOG_DEBUG, "Settings are not implemented yet!", "");
+	logger(LOG_DEBUG, "Settings are not implemented yet!", NULL);
 }
 
 void Menu_init(Menu * menu, Assets * assets) {

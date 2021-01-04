@@ -3,7 +3,7 @@
 
 // Engine key function
 void useEngineKey(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNotes * objectives) {
-    logger(LOG_DEBUG, "Using engine key!", "");
+    logger(LOG_DEBUG, "Using engine key!", NULL);
     if (Door_open(game->map, game->doors[MOTOR1_DOOR], game->player->position, true) & Door_open(game->map, game->doors[MOTOR2_DOOR], game->player->position, true)) {
         Inventory_removeItem(game->player->inventory, ENGINE_KEY);
         ObjectivesNotes_finish(objectives,FIND_ENGINES_KEY);
@@ -12,7 +12,7 @@ void useEngineKey(Game * game, Item * items[MAX_ITEMS], Assets * assets, Objecti
 
 // Magnet card function
 void useMagnetCardBlue(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNotes * objectives) {
-    logger(LOG_DEBUG, "Using magnet card!", "");
+    logger(LOG_DEBUG, "Using magnet card!", NULL);
     if (Door_open(game->map, game->doors[MAGNET_DOOR2], game->player->position, true)) {
         Inventory_removeItem(game->player->inventory, MAGNET_CARD_BLUE);
         ObjectivesNotes_finish(objectives, FIND_BLUE_MAGNET_CARD);
@@ -20,7 +20,7 @@ void useMagnetCardBlue(Game * game, Item * items[MAX_ITEMS], Assets * assets, Ob
 }
 
 void useMagnetCardGreen(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNotes * objectives) {
-    logger(LOG_DEBUG, "Using magnet card!", "");
+    logger(LOG_DEBUG, "Using magnet card!", NULL);
     if (Door_open(game->map, game->doors[MAGNET_DOOR1], game->player->position, true)) {
         Inventory_removeItem(game->player->inventory, MAGNET_CARD_GREEN);
         ObjectivesNotes_finish(objectives, FIND_GREEN_MAGNET_CARD);
@@ -28,7 +28,7 @@ void useMagnetCardGreen(Game * game, Item * items[MAX_ITEMS], Assets * assets, O
 }
 
 void useMagnetCardYellow(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNotes * objectives) {
-    logger(LOG_DEBUG, "Using magnet card!", "");
+    logger(LOG_DEBUG, "Using magnet card!", NULL);
     if (Door_open(game->map, game->doors[MAGNET_DOOR], game->player->position, true)) {
         Inventory_removeItem(game->player->inventory, MAGNET_CARD_YELLOW);
         ObjectivesNotes_finish(objectives, FIND_YELLOW_MAGNET_CARD);
@@ -36,7 +36,7 @@ void useMagnetCardYellow(Game * game, Item * items[MAX_ITEMS], Assets * assets, 
 }
 
 void useMagnetCardRed(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNotes * objectives) {
-    logger(LOG_DEBUG, "Using magnet card!", "");
+    logger(LOG_DEBUG, "Using magnet card!", NULL);
     if (Door_open(game->map, game->doors[MAGNET_DOOR3], game->player->position, true)) {
         Inventory_removeItem(game->player->inventory, MAGNET_CARD_RED);
         ObjectivesNotes_finish(objectives, FIND_RED_MAGNET_CARD);
@@ -45,21 +45,21 @@ void useMagnetCardRed(Game * game, Item * items[MAX_ITEMS], Assets * assets, Obj
 
 // Flint inactive function
 void useFlint(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNotes * objectives) {
-    logger(LOG_DEBUG, "Using inactive flint!", "");
+    logger(LOG_DEBUG, "Using inactive flint!", NULL);
     Inventory_removeItem(game->player->inventory, FLINT);
     Inventory_addItem(game->player->inventory, items[FLINT_ACTIVE]);
 }
 
 // Flint inactive function
 void useFlintActive(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNotes * objectives) {
-    logger(LOG_DEBUG, "Using active flint!", "");
+    logger(LOG_DEBUG, "Using active flint!", NULL);
     Inventory_removeItem(game->player->inventory, FLINT_ACTIVE);
     Inventory_addItem(game->player->inventory, items[FLINT]);
 }
 
 // Notes function
 void useNotes(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNotes * objectives) {
-    logger(LOG_DEBUG, "Using notes!", "");
+    logger(LOG_DEBUG, "Using notes!", NULL);
     objectives->visible = !objectives->visible;
 }
 
@@ -72,14 +72,14 @@ void craftBomb(Game * game, Item * items[MAX_ITEMS], Assets * assets, Objectives
         PlaySound(assets->sounds[CRAFT_SOUND]);
     }
     else
-        logger(LOG_DEBUG, "You must have the Rope and Ammonium Nitrate!", "");
+        logger(LOG_DEBUG, "You must have the Rope and Ammonium Nitrate!", NULL);
 }
 
 // Bomb function
 void useBomb(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNotes * objectives) {
-    logger(LOG_DEBUG, "Using bomb!", "");
+    logger(LOG_DEBUG, "Using bomb!", NULL);
     if (Door_open(game->map, game->doors[CELL_DOOR], game->player->position, true)) {
-        logger(LOG_DEBUG, "Cell door is open!", "");
+        logger(LOG_DEBUG, "Cell door is open!", NULL);
         Inventory_removeItem(game->player->inventory, BOMB);
         PlaySound(assets->sounds[BOMB_SOUND]);
         ObjectivesNotes_finish(objectives, OPEN_CELL_OBJECTIVE);
@@ -89,7 +89,7 @@ void useBomb(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNo
 // USB Key function
 
 void useUSBKey(Game * game, Item * items[MAX_ITEMS], Assets * assets, ObjectivesNotes * objectives) {
-    logger(LOG_DEBUG, "Using USB Key!", "");
+    logger(LOG_DEBUG, "Using USB Key!", NULL);
     ObjectivesNotes_finish(objectives,FIND_USB_KEY);
 
     if(CheckCollisionPointCircle(game->player->position, (Vector2) {5580, 1672}, 96.f))
@@ -97,7 +97,7 @@ void useUSBKey(Game * game, Item * items[MAX_ITEMS], Assets * assets, Objectives
 }
 
 GameItems * GameItems_new() {
-	GameItems * gi = malloc(sizeof(GameItems));
+    GameItems * gi = malloc(sizeof(GameItems));
     return gi;
 }
 
@@ -143,6 +143,6 @@ void GameItems_init(GameItems * gameItems, Assets * assets) {
 }
 
 void GameItems_control(Game * game, GameItems * gameItems, Assets * assets, ObjectivesNotes * objectives) {
-	Item * item = game->player->inventory->items[game->player->inventory->selected];
-	if (IsKeyPressed(KEY_E) && item != 0x0) gameItems->use[item->id](game, gameItems->items, assets, objectives);
+    Item * item = game->player->inventory->items[game->player->inventory->selected];
+    if (IsKeyPressed(KEY_E) && item != 0x0) gameItems->use[item->id](game, gameItems->items, assets, objectives);
 }
