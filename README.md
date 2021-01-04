@@ -10,6 +10,10 @@ Après une nuit de sommeil plutôt agité vous vous réveillez et vous constatez
 Dans le même temps l'ordinateur principal a totalement été corrompu par un virus extraterrestre et cela a déclenché la procédure d'autodestruction. 
 Votre but sera de trouver les différentes cartes magnétiques et clés afin d'ouvrir les portes qui vous mèneront vers votre objectif : une clé USB contenant un programme de secours vous permettant de reprendre le contrôle du vaisseau dans le but de revenir sur Terre et retrouver la civilisation.
 
+<p align="center">
+  <img src="docs/demo.gif" alt="Game Demo" />
+</p>
+
 ## Installation
 
 Projet conçu pour une compilation avec GCC et la librairie Raylib. De par la nature de la procédure d'installation et de linkage, Linux est le système d'exploitation à préférer.
