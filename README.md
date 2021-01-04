@@ -52,9 +52,9 @@ rm -fr raylib
 
 ```bash
 ## terminal
-git clone https://gvipers.imt-lille-douai.fr/fatus/50NuancesDeCode/game
+git clone https://github.com/killax-d/FATUS-Project
 
-## dans le répertoire game
+## dans le répertoire FATUS-Project
 
 make
 
