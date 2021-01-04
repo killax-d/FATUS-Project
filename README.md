@@ -27,7 +27,7 @@ sudo apt install build-essential git cmake
 sudo apt install libasound2-dev mesa-common-dev libx11-dev libxrandr-dev libxi-dev xorg-dev libgl1-mesa-dev libglu1-mesa-dev 
 ```
 ## Compiler et installer Raylib 3.0.0 
-[Windows](docs/README.md)
+[Windows](docs/README.md#d%C3%A9pendance-sous-window---non-recommand%C3%A9)
 
 Linux :
 ```bash
