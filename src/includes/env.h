@@ -10,7 +10,7 @@
  */
 
 
-#define DEBUG 1 /**< Is the program in DEBUG mode ? */
+#define DEBUG 0 /**< Is the program in DEBUG mode ? */
 
 /**
  * Customize the logger of Raylib
