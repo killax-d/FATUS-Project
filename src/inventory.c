@@ -27,7 +27,7 @@ void Inventory_draw(int x, int y, Inventory * inv) {
 // Contains items
 // ex: Inventory_contain(player->inventory, PRISON_KEY);
 bool Inventory_contain(Inventory * inv, int id) {
-	for (int i = 0; i < INVENTORY_SIZE; i++) if (inv->items[i]->id == id) return true;
+	for (int i = 0; i < INVENTORY_SIZE; i++) if (inv->items[i] && inv->items[i]->id == id) return true;
 	return false;
 }
 
