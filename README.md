@@ -87,7 +87,7 @@ cd /dist
 |                          <h6 style="margin: 0">@Julio</h6><img src="https://cdn.discordapp.com/attachments/787703407325609984/795368766778245160/deguise-en-jeff-tuche-un-gilet-jaune-fait-le-buzz-sur-les-reseaux-sociaux.jpeg" alt="Julio" height="120" style="vertical-align:top; margin:4px">                          	|        Developer        	|         <img height="150" src="https://media1.tenor.com/images/c7504b9fb03c95b3b5687d744687e11c/tenor.gif" />         	|
 
 ## Version
-Dernière version stable : Release-1.0
+Dernière version stable : [Release-1.0](docs/changelogs/release-1.0.md)
 
 ## Documentation
 La documentation est disponible [ici](https://killax-d.github.io/docs/FATUS/v1.0/).
